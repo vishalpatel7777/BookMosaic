@@ -1,0 +1,422 @@
+/* .background-img .signup-box {
+    position: relative;
+    z-index: 10;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}*/
+
+/* .background-img .signup-box label {
+    align-self: flex-start;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.background-img .signup-box input {
+    width: 18rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.background-img .signup-box button {
+    width: 100%;
+    margin-top: 1rem;
+    background-color: #f97316;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}  */
+
+    /* .signup-image{
+        position: relative;
+
+    } */
+
+    .background-img .img {
+    
+        width: 62%;
+        object-fit: cover;
+        margin-left: 70px;
+        /* padding-top: 0px ; */
+    
+    }
+    
+    .background-img .signup-header {
+        position: relative;
+        bottom: 500px;
+    }
+    
+    .background-img .signup-header .left {
+        position: relative;
+        left: 355px;
+        bottom: 115px;
+        width: 100px;
+    }
+    
+    .background-img .signup-header .signup {
+        position: relative;
+        left: 470px;
+        bottom: 200px;
+        font-size: 65px;
+    }
+    
+    .background-img .signup-header .right {
+        position: relative;
+        left: 635px;
+        bottom: 285px;
+        width: 100px;
+    }
+    
+    .background-img .signup-box {
+        position: relative;
+        /* left: 120px; */
+        bottom: 650px;
+        display: flex;
+        width: 700px;
+        height: 300px;
+        border-radius: 24px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    
+    }
+    
+    .background-img .signup-box .signupbtn {
+        width: 150px;
+        flex: 0 0 auto;
+        border-radius: 60px;
+        height: 50px;
+        background-color: #c15c54;
+        color: black;
+        font-family: 'Caveat', sans-serif;
+        font-size: 27px;
+        position: relative;
+        right: 1320px;
+        top: 280px; 
+        padding-bottom: 40px;
+        padding-top: 6px;
+    }
+    /* 
+    .background-img .signup-box .signupbtn1 {
+        width: 150px;
+        flex: 0 0 auto;
+        border-radius: 60px;
+        height: 50px;
+        background-color: #c15c54;
+        color: black;
+        font-family: 'Caveat', sans-serif;
+        font-size: 27px;
+        position: relative;
+        /* right: 1310px; 
+        left: 160px;
+        top: 260px;
+        padding-bottom: 40px;
+        padding-top: 6px;
+    } */
+    .background-img .signup-box .signupbtn2  {
+        width: 150px;
+        flex: 0 0 auto;
+        border-radius: 60px;
+        height: 50px;
+        background-color: #c15c54;
+        color: black;
+        font-family: 'Caveat', sans-serif;
+        font-size: 27px;
+        position: relative;
+        right: 1225px;
+        /* left: 100px; */
+        /* right: 960px; */
+        top: 280px;
+        padding-bottom: 40px;
+        padding-top: 6px;
+    }
+    
+    
+    .background-img .signup-right .sitting1 {
+        position: relative;
+        left: 760px;
+        bottom: 1240px;
+    
+    }
+    .background-img .signup-right .sitting2 {
+        position: relative;
+        right: 30px;
+        bottom: 760px;
+    
+    }
+    
+    .background-img .signup-box .email {
+        position: relative;
+        font-size: 25px;
+        /* left: 0px; */
+        right: 120px;
+        bottom: 15px;
+    }
+    
+    /* new added full name and phone  */
+    .background-img .signup-box .fullname {
+        position: relative;
+        font-size: 25px;
+        bottom: 65px;
+        left: 250px;
+        /* white-space:unset; */
+        white-space: nowrap;
+        /* width: 2px; */
+    }
+    .background-img .signup-box .phone {
+        position: relative;
+        font-size: 25px;
+        left: 190px;
+        /* top: 10px; */
+        bottom: 30px;
+        /* right: 1420px; */
+        /* width: 100%; */
+        
+    }
+    .background-img .signup-box .input-fullname {
+        position: relative;
+        display: flex;
+        font-size: 25px;
+        /* left: 120px; */
+        /* bottom: 0px; */
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        width: 296px;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+        flex: 0 0 auto;
+    }
+    .background-img .signup-box .input-phone {
+        position: relative;
+        display: flex;
+        font-size: 25px;
+        /* left: 120px; */
+        /* bottom: 15px; */
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        width: 296px;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+        flex: 0 0 auto;
+        /* top: 100px; */
+    }
+    
+    
+    
+    
+    .background-img .signup-box .password {
+        position: relative;
+        font-size: 25px;
+        top: 35px;
+        /* left: 0px; */
+        right: 80px;
+        /* right: 660px; */
+    
+    }
+    .background-img .signup-box .confirm-password {
+        position: relative;
+        white-space: nowrap;
+        font-size: 25px;
+        top: 95px;
+        /* left: 100px; */
+        right: 480px;
+    
+    }
+    
+    
+    .background-img .signup-box .username{
+        top: 35px;
+        right: 480px;
+    }
+    
+    .background-img .signup-box .age{
+        top: 85px;
+        right: 840px;
+    }
+    
+    .background-img .signup-box .genre{
+        top: 140px;
+        right: 1190px;
+    }
+    /* 
+    .background-img .signup-box .book {
+        position: relative;
+        bottom: 280px;
+        left: 202px;
+        width: 100px;
+        height: auto;
+    } */
+    
+    .background-img .signup-box .username , .background-img .signup-box .age , .background-img .signup-box .genre , .background-img .signup-box .fullname , .background-img .signup-box .phone{
+        position: relative;
+        font-size: 25px;
+        
+    }
+    
+    
+    .background-img .signup-box .input-email {
+        position: relative;
+        display: flex;
+        font-size: 25px;
+        /* left: 120px; */
+        bottom: 20px;
+        right: 70px;
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        width: 296px;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+        flex: 0 0 auto;
+    }
+    
+    .background-img .signup-box .input-pass {
+        position: relative;
+        display: flex;
+        font-size: 25px;
+        top: 30px;
+        /* left: 20px; */
+        right: 40px;
+        height: 46px;
+        width: 296px;
+        flex: 0 0 auto;
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+    }
+    
+    .background-img .signup-box .input-confirm-pass {
+        position: relative;
+        display: flex;
+        font-size: 25px;
+        top: 90px;
+        /* left: 0px; */
+        right: 460px;
+        height: 46px;
+        width: 296px;
+        flex: 0 0 auto;
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+    }
+    
+    .background-img .signup-box .input-username , .background-img .signup-box .input-age , .background-img .signup-box .input-genre , .background-img .signup-box .input-fullname , .background-img .signup-box .input-phone{
+        font-size: 25px;
+        position: relative;
+        display: flex;
+        background-color: #91aeb2;
+        border-radius: 10px;
+        height: 46px;
+        width: 296px;
+        flex: 0 0 auto;
+        font-family: 'Caveat', sans-serif;
+        outline: none;
+        /* width: 400px; */
+    
+    }
+    
+    .background-img .signup-box .input-username{
+        top: 32px;
+        right: 450px;
+    }
+    
+    .background-img .signup-box .input-age{
+        top: 87px;
+        right: 780px;
+    
+    }
+    
+    .background-img .signup-box .input-genre{
+        top: 140px;
+        right: 1127px;
+    }
+    
+    .background-img .signup-box .input-fullname{
+        /* top: 10px; */
+        bottom: 70px;
+        /* right: 10px; */
+        left: 278px;
+    }
+    
+    .background-img .signup-box .input-phone{
+        /* top: 270px; */
+        /* right: 1240px; */
+        left: 374px;
+        bottom: 70px;
+    }
+    
+    
+    /* .background-img .signup-box .Registration-btn {
+        width: 240px;
+        border-radius: 60px;
+        height: 50px;
+        background-color: #63918b;
+        color: black;
+        font-family: 'Caveat', sans-serif;
+        font-size: 24px;
+        position: relative;
+        left: -50px;
+        bottom: 60px;
+    
+    } */
+    
+    
+    
+    /* image */
+    /* .profile-image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .upload-label {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 2px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        overflow: hidden;
+      }
+      
+      .profile-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .upload-placeholder {
+        color: #777;
+        font-size: 14px;
+      }
+      
+      .remove-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+       */

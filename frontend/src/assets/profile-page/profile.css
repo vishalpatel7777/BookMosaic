@@ -1,0 +1,253 @@
+/* profile photo */
+.profile-pic {
+    flex: 0 0 auto;
+    position: relative;
+    grid-column: span;
+    top: 20px;
+}
+
+/* profile username  */
+.profile-page .profile-username {
+    position: relative;
+    color: black;
+    background-color: #91aeb2;
+    border-radius: 30px;
+    height: 40px;
+    width: 150px;
+    flex: 0 0 auto;
+    font-family: 'Caveat', sans-serif;
+    font-size: 23px;
+    left: 590px;
+    bottom: 0px;
+    top: 50px;
+    padding: 0px;
+}
+
+/* cart button */
+.profile-page .cart {
+    position: relative;
+    color: black;
+    background-color: #ffffff;
+    border-radius: 10px;
+    height: 40px;
+    width: 170px;
+    flex: 0 0 auto;
+    font-family: 'Caveat', sans-serif;
+    font-size: 23px;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.80);
+    left: 980px;
+    bottom: 40px;
+    padding: 0px 0px 0px 30px;
+    justify-content: space-between;
+}
+
+.profile-page .cart .profile-cart {
+    font-family: 'Caveat', sans-serif;
+    font-size: 23px;
+    padding: 0 0 0 35px;
+    bottom: 0px;
+    position: relative;
+    background: none;
+    border: none;
+}
+
+.profile-page .cart #cart {
+    top: 7px;
+    right: 10px;
+    position: relative;
+}
+
+/* wishlist button */
+.profile-page .wishlist {
+    position: relative;
+    color: black;
+    background-color: #ffffff;
+    border-radius: 10px;
+    height: 40px;
+    width: 170px;
+    flex: 0 0 auto;
+    font-family: 'Caveat', sans-serif;
+    font-size: 23px;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.80);
+    left: 980px;
+    bottom: 50px;
+    padding: 0px 0px 0px 30px;
+    justify-content: space-between;
+}
+
+.profile-page .wishlist .profile-wishlist {
+    font-family: 'Caveat', sans-serif;
+    font-size: 21px;
+    background: none;
+    width: 200px;
+    position: relative;
+    bottom: 30px;
+    right: 20px;
+    border: none;
+}
+
+.profile-page .wishlist #profile-heart {
+    top: 7px;
+    right: 10px;
+
+    position: relative;
+}
+
+
+/* box css */
+.profile-page .profile-box {
+    height: 452px;
+    border: 2px solid #ededed;
+    width: 1114px;
+    background-color: #ededed;
+    bottom: 140px;
+    left: 190px;
+    position: relative;
+
+}
+
+/* left-top corner photo */
+.profile-page .profile-box .profile-1 {
+    position: relative;
+
+    top: 20px;
+
+    left: 25px;
+    width: 10%;
+}
+
+/* left-bottom corner photo */
+.profile-page .profile-box .profile-2 {
+    top: 215px;
+    position: relative;
+    width: 25%;
+}
+
+/* right side photo */
+.profile-page .profile-box .profile-3 {
+    left: 800px;
+    bottom: 160px;
+    position: relative;
+}
+
+/* name label */
+.profile-page .profile-box .profile-name {
+    bottom: 450px;
+    left: 230px;
+    position: relative;
+
+}
+
+/* name input */
+.profile-page .profile-box .profile-name-input {
+    bottom: 450px;
+    left: 230px;
+    position: relative;
+}
+
+/* age label */
+.profile-page .profile-box .profile-age {
+    position: relative;
+    bottom: 400px;
+    flex: 0 0 auto;
+    right: 30px;
+}
+
+/* age input */
+.profile-page .profile-box .profile-age-input {
+    position: relative;
+    bottom: 400px;
+    right: 7px;
+}
+
+/* email label */
+.profile-page .profile-box .profile-email {
+    position: relative;
+    /* bottom: 355px; */
+    right: 255px;
+}
+
+/* label input */
+.profile-page .profile-box .profile-email-input {
+    position: relative;
+    bottom: 355px;
+    right: 245px;
+}
+
+/* favorite book genre label */
+.profile-page .profile-box .profile-genre {
+    position: relative;
+    bottom: 310px;
+    right: 495px;
+}
+
+/* favorite book genre input */
+.profile-page .profile-box .profile-genre-input {
+    position: relative;
+    bottom: 340px;
+    left: 370px;
+}
+
+/* suggestion button */
+.profile-page .profile-suggestion {
+    color: black;
+    background-color: #d4c134;
+    border-radius: 30px;
+    height: 45px;
+    width: 140px;
+    font-family: 'Caveat', sans-serif;
+
+}
+
+.profile-page .profile-box .profile-email-input,
+.profile-page .profile-box .profile-genre-input,
+.profile-page .profile-box .profile-age-input,
+.profile-page .profile-box .profile-name-input {
+    background-color: #ededed;
+
+    font-size: 23px;
+    font-family: 'Caveat', sans-serif;
+
+}
+
+
+
+/* Image upload */
+.profile-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-label {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.profile-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-placeholder {
+    color: #777;
+    font-size: 14px;
+}
+
+.remove-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}

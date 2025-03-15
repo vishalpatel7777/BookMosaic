@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Caveat', sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 100px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  font-size: 22px;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  left: 150px;
+  position: relative;
+}
+
+.icon {
+  font-size: 20px;
+  margin: 0 10px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-size: 22px;
+  color: #555;
+}
+
+.search-bar input::placeholder {
+  font-family: 'Caveat', sans-serif;
+}

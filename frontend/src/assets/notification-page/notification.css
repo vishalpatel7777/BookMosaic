@@ -1,0 +1,266 @@
+.notification-body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Caveat', sans-serif;
+  background-color: white;
+  color: black;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+/* Notification container */
+#notification-container {
+  position: relative;
+  height: 140vh;
+  overflow: hidden;
+  padding-bottom: 20px;
+  overflow-y: auto;
+}
+
+/* Wrapper for notifications (scrollable) */
+.notification-wrapper {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* Notification box styles */
+.notification-box {
+  width: 695px;
+  height: 284px;
+  position: relative;
+  left: 30px;
+  border: 4px solid #bdbdbd;
+  padding: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+/* Notification text */
+.notification-box .notification-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 270px;
+  color: #000000;
+}
+
+/* Book image in the notification box */
+.notification-box .book-img-notification {
+  width: 150px;
+  height: 240px;
+  position: relative;
+  flex: 0 0 auto;
+  left: 30px;
+
+  bottom: 0px;
+}
+
+/* Rating stars */
+.notification-box .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 280px;
+}
+
+.notification-box .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Filled stars */
+.notification-box .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.notification-box .rating {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #f1e6cb;
+  border: 1px solid #f1e6cb;
+  cursor: pointer;
+  font-family: 'Caveat', sans-serif;
+  position: relative;
+  bottom: 290px;
+  left: 80px;
+}
+
+/* Header styles */
+.notification-border-bottom-1 #notification-icon {
+  position: relative;
+  top: 40px;
+  left: 20px;
+  font-size: 40px;
+}
+
+.notification-border-bottom-1 .notification-Us {
+  position: relative;
+  left: 70px;
+  bottom: 10px;
+  font-size: 30px;
+  flex: 0 0 auto;
+  padding: 0px;
+  margin: 0px;
+  font-family: 'Caveat', sans-serif;
+}
+
+/* Line below Notification label */
+.notification-border-bottom-1 {
+  border-bottom: 4px solid #bdbdbd;
+  position: relative;
+  left: 40px;
+  width: 710px;
+  bottom: 20px;
+}
+
+/* Background book (stays fixed) */
+.background-book {
+  position: fixed;
+  width: 20%;
+  left: 1000px;
+  bottom: 200px;
+}
+
+.notification-wrapper .notification-box:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+/* Ensure the book image in the notification box is positioned correctly */
+.notification-box .book-img-notification {
+  width: 150px;
+  height: 250px;
+  position: relative;
+  left: 30px;
+  flex: 0 0 auto;
+}
+
+/* Notification text styling for the text box */
+.notification-box .notification-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 250px;
+  color: #000000;
+}
+
+/* Rating stars */
+.notification-box .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 275px;
+}
+
+.notification-box .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Filled stars */
+.notification-box .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.notification-box .rating {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #f1e6cb;
+  border: 1px solid #f1e6cb;
+  cursor: pointer;
+  font-family: 'Caveat', sans-serif;
+  position: relative;
+  bottom: 310px;
+  left: 80px;
+}
+
+*/ .notification-box[id^="notification-box-"] {
+  width: 100%;
+  max-width: 685px;
+  height: 264px;
+  position: relative;
+  left: 30px;
+  border: 4px solid #bdbdbd;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-wrap: break-word;
+  flex: 0 0 auto;
+}
+
+/* Notification text for each box */
+.notification-box[id^="notification-box-"] .notification-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 270px;
+  color: #000000;
+}
+
+/* Book image for each new box */
+.notification-box[id^="notification-box-"] .book-img-notification {
+  width: 150px;
+  height: 250px;
+  position: relative;
+  left: 30px;
+  top: 5px;
+  flex: 0 0 auto;
+}
+
+/* Rating stars for each new box */
+.notification-box[id^="notification-box-"] .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 310px;
+}
+
+.notification-box[id^="notification-box-"] .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+
+}
+
+.notification-box[id^="notification-box-"] .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Rating button for each box */
+.notification-box[id^="notification-box-"] .rating {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #f1e6cb;
+  border: 1px solid #f1e6cb;
+  cursor: pointer;
+  font-family: 'Caveat', sans-serif;
+  position: relative;
+  bottom: 310px;
+  left: 80px;
+}

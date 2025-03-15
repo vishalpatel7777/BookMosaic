@@ -1,0 +1,62 @@
+.content {
+  padding: 20px;
+  padding-top: 250px;
+  padding-left: 340px;
+  position: relative;
+}
+
+.content p {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  width: 60%;
+}
+
+.images {
+  position: absolute;
+  top: 150px;
+  right: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.top-image {
+  width: 300px;
+  height: auto;
+}
+
+.button-about {
+  display: block;
+  padding: 10px 20px;
+  background-color: orange;
+  color: black    ;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+a {
+    text-decoration: none; /* Removes the underline from the link */
+  }
+
+.bookshelf {
+    display: flex; /* Flexbox layout for a row */
+    justify-content: left; /* Center the books horizontally */
+    align-items: flex-end;
+   margin-top: 170px;  /* Align books at the bottom (like they're on a shelf) */
+   margin-left: 0px;     
+   gap: 0px; /* Space between books */
+    border-radius: 10px; /* Rounded corners */
+    position: absolute;
+          bottom: 0;
+          right: 0;
+  }
+
+  .bookshelf img {
+    width: 60px; /* Set book width */
+    height: 100px; /* Set book height */
+    object-fit: cover; /* Maintain aspect ratio */
+    transition: transform 0.3s ease; /* Hover animation */
+    cursor: pointer; /* Indicate interactivity */
+  }

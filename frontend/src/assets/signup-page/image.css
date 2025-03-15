@@ -1,0 +1,27 @@
+.image-upload-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.image-input {
+  margin-bottom: 10px;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}

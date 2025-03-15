@@ -1,0 +1,21 @@
+.bg-welcome {
+    width: 100%;
+    position: relative;
+
+}
+
+.go-button {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    font-size: 23px;
+    border-radius: 25px;
+    color: #000000;
+    background-color: #cd5a57;
+    border: 1px solid #c6302c;
+    cursor: pointer;
+    font-family: 'Caveat', sans-serif;
+    position: relative;
+    bottom: 160px;
+    right: 20px;
+}

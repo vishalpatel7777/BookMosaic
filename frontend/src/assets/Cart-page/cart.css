@@ -1,0 +1,281 @@
+.Cart-body {
+  font-family: "Caveat", sans-serif;
+  background-color: white;
+  color: black;
+  line-height: 1.6;
+}
+
+/* Cart container */
+#Cart-container {
+  position: relative;
+  height: 140vh;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+/* Wrapper for Carts (scrollable) */
+.Cart-wrapper {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* Cart box styles */
+.Cart-box {
+  width: 695px;
+  height: 284px;
+  position: relative;
+  left: 30px;
+  border: 4px solid #bdbdbd;
+  padding: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+/* Cart text */
+.Cart-box .Cart-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 270px;
+  color: #000000;
+}
+
+/* Book image in the Cart box */
+.Cart-box .book-img-Cart {
+  width: 150px;
+  height: 240px;
+  position: relative;
+  flex: 0 0 auto;
+  left: 30px;
+
+  bottom: 0px;
+}
+
+.Cart-box .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 280px;
+}
+
+.Cart-box .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Filled stars */
+.Cart-box .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.Cart-box .rating {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #f1e6cb;
+  border: 1px solid #f1e6cb;
+  cursor: pointer;
+  font-family: "Caveat", sans-serif;
+  position: relative;
+  bottom: 290px;
+  left: 80px;
+}
+
+/* Header styles */
+.Cart-border-bottom-1 #Cart-icon {
+  position: relative;
+  top: 40px;
+  left: 20px;
+  font-size: 40px;
+}
+
+.Cart-border-bottom-1 .Cart-Us {
+  position: relative;
+  left: 70px;
+  bottom: 10px;
+  font-size: 30px;
+  flex: 0 0 auto;
+  padding: 0px;
+  margin: 0px;
+  font-family: "Caveat", sans-serif;
+}
+
+/* Line below Cart label */
+.Cart-border-bottom-1 {
+  border-bottom: 4px solid #bdbdbd;
+  position: relative;
+  left: 40px;
+  width: 1410px;
+  bottom: 20px;
+}
+
+/* Background book (stays fixed) */
+.background-book-cart {
+  width: 32%;
+  position: relative;
+  left: 0px;
+  bottom: 910px;
+}
+
+/* Adding some space between the Cart boxes */
+.Cart-wrapper .Cart-box:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.Cart-box {
+  position: relative;
+  left: 600px;
+  overflow-y: hidden;
+}
+
+.Cart-box .book-img-Cart {
+  width: 150px;
+  height: 250px;
+  position: relative;
+  left: 30px;
+  flex: 0 0 auto;
+}
+
+/* Cart text styling for the text box */
+.Cart-box .Cart-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 250px;
+  color: #000000;
+}
+
+/* Rating stars */
+.Cart-box .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 275px;
+}
+
+.Cart-box .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Filled stars */
+.Cart-box .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.Cart-box .rating-add {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #2e86a7;
+  border: 1px solid #2e86a7;
+  cursor: pointer;
+  font-family: "Caveat", sans-serif;
+  position: relative;
+  bottom: 110px;
+
+  right: 50px;
+}
+.Cart-box .rating-remove {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #c6302c;
+  border: 1px solid #c6302c;
+  cursor: pointer;
+  font-family: "Caveat", sans-serif;
+  position: relative;
+  bottom: 177px;
+  left: 140px;
+}
+
+.Cart-box[id^="Cart-box-"] {
+  width: 100%;
+  max-width: 685px;
+  height: 264px;
+  position: relative;
+  left: 30px;
+  border: 4px solid #bdbdbd;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-wrap: break-word;
+  flex: 0 0 auto;
+}
+
+/* Cart text for each box */
+.Cart-box[id^="Cart-box-"] .Cart-text {
+  font-size: 23px;
+  position: relative;
+  left: 260px;
+  bottom: 270px;
+  color: #000000;
+}
+
+/* Book image for each new box */
+.Cart-box[id^="Cart-box-"] .book-img-Cart {
+  width: 150px;
+  height: 250px;
+  position: relative;
+  left: 30px;
+  top: 5px;
+  flex: 0 0 auto;
+}
+
+/* Rating stars for each new box */
+.Cart-box[id^="Cart-box-"] .book-rating {
+  position: relative;
+  left: 280px;
+  bottom: 310px;
+}
+
+.Cart-box[id^="Cart-box-"] .book-rating .star {
+  font-size: 70px;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.Cart-box[id^="Cart-box-"] .book-rating .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Rating button for each box */
+.Cart-box[id^="Cart-box-"] .rating {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 25px;
+  color: #000000;
+  background-color: #2e86a7;
+  border: 1px solid #2e86a7;
+  cursor: pointer;
+  font-family: "Caveat", sans-serif;
+  position: relative;
+  bottom: 310px;
+  left: 80px;
+}
