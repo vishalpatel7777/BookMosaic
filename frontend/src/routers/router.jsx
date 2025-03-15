@@ -42,7 +42,7 @@ import AdminUser from "../components/Admin/Edituser";
 import AdminProfile from "../components/Admin/AdminProfile";
 import AdminSettings from "../components/Admin/AdminSetting";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const router = createBrowserRouter([
   {

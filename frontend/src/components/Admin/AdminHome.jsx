@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Adminhome = () => {
   return (

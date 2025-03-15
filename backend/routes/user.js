@@ -100,7 +100,7 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
 
     const verificationLink = `${
-      process.env.BASE_URL || "http://localhost:1000"
+      process.env.BASE_URL || "https://bookmosaic.onrender.com"
     }/api/v1/verify-email/${verificationToken}`;
     const mailOptions = {
       from: process.env.EMAIL_USER,

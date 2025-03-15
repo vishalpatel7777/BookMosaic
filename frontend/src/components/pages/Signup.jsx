@@ -6,7 +6,7 @@ import 'react-phone-input-2/lib/style.css';
 import ImageUpload from "../Profile/ImageUpload";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Signup = () => {
   const [showAlert, setShowAlert] = useState(false);

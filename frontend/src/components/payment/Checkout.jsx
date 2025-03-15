@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 function Checkout() {
   const { state } = useLocation();

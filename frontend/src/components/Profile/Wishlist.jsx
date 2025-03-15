@@ -4,7 +4,7 @@ import Loader from "../Loader/Loader";
 import WishlistBookCard from "../BookCard/WishlistBookCard";
 import { FaBook } from "react-icons/fa";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);

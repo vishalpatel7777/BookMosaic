@@ -5,7 +5,7 @@ import FavoriteBookCard from "../BookCard/FavoriteBookCard";
 import { FaHeart } from "react-icons/fa";
 import "../../assets/wishlist-page/favorite.css";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Wishlist = () => {
   const [favorite, setFavorite] = useState([]);

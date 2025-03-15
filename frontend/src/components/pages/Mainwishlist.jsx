@@ -6,7 +6,7 @@ import { GrLanguage } from "react-icons/gr";
 import CustomAlert from "../Alert/CustomAlert";
 
 
-const API_URL = "http://localhost:1000"; // Hardcoded for now
+const API_URL = "https://bookmosaic.onrender.com"; // Hardcoded for now
 
 const Mainwishlist = () => {
   const { id } = useParams();

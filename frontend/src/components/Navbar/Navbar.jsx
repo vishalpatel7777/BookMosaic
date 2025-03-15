@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateRoutes } from "../../store/routesSlice";
 import BookCard from "../BookCard/BookCard";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");

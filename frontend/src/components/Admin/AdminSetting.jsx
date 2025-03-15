@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 export default function AdminSettings() {
   const [showAlert, setShowAlert] = useState(false);

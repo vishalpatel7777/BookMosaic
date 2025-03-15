@@ -3,7 +3,7 @@ import { Link, useLocation, Outlet } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const EditBook = () => {
   const location = useLocation();

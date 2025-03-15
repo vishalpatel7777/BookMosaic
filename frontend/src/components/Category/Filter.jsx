@@ -4,7 +4,7 @@ import Loader from "../Loader/Loader";
 import BookCard from "../BookCard/BookCard";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Filter = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);

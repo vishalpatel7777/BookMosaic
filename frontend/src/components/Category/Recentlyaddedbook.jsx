@@ -3,7 +3,7 @@ import axios from "axios";
 import BookCard from "../BookCard/BookCard";
 import Loader from "../Loader/Loader";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const Recentlyaddedbook = () => {
   const [Book, setBook] = useState(null);

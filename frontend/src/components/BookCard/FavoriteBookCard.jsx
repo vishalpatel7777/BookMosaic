@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const FavoriteBookCard = ({ data, setFavorite }) => {
   const headers = {

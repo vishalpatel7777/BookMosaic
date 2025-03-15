@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000"; // Hardcoded for now
+const API_URL = "https://bookmosaic.onrender.com"; // Hardcoded for now
 
 
 const Notification = () => {

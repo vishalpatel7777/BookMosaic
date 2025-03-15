@@ -4,7 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import CustomAlert from "../../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const AddBook = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);

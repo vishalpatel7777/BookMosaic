@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import "../../assets/welcome-page/welcome.css";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 function Welcome() {
   useEffect(() => {

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-const API_URL = "http://localhost:1000"; // Hardcoded for now
+const API_URL = "https://bookmosaic.onrender.com"; // Hardcoded for now
 
 const Buy = () => {
   const { id } = useParams();

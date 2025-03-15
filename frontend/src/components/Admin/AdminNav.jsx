@@ -5,7 +5,7 @@ import { updateRoutes } from "../../store/routesSlice";
 import { authActions } from "../../store/auth";
 import BookCard from "../BookCard/BookCard";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const AdminNavbar = () => {
   const navigate = useNavigate();

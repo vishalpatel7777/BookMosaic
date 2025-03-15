@@ -4,7 +4,7 @@ import AnalogClock from "../Fun-components/AnalogClock";
 import MotivationalQuote from "../Fun-components/MotivationalQuote";
 import AdminNotes from "../Fun-components/AdminNotes";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 export default function Dashboard() {
   const location = useLocation();

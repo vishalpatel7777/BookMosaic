@@ -8,7 +8,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { authActions } from "../../store/auth";
 
 
-const API_URL = "http://localhost:1000"; // Hardcoded for now
+const API_URL = "https://bookmosaic.onrender.com"; // Hardcoded for now
 
 const Profile = () => {
   const dispatch = useDispatch();

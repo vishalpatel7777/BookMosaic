@@ -3,7 +3,7 @@ import axios from 'axios';
 import Loader from "../Loader/Loader";
 import CustomAlert from "../Alert/CustomAlert";
 
-const API_URL = "http://localhost:1000";
+const API_URL = "https://bookmosaic.onrender.com";
 
 const EditProfile = () => {
   const [showAlert, setShowAlert] = useState(false);
