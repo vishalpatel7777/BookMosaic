@@ -30,7 +30,7 @@ const Wishlist = () => {
       }
     };
     fetch();
-  }, [favorite]);
+  }, []);
 
   return (
     <>

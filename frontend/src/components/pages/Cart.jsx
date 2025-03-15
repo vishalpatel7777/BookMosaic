@@ -38,7 +38,7 @@ const Cart = () => {
       }
     };
     fetch();
-  }, [cart]); // Removed cart from dependencies to avoid infinite loop
+  }, []); // Removed cart from dependencies to avoid infinite loop
 
   useEffect(() => {
     if (cart && cart.length > 0) {

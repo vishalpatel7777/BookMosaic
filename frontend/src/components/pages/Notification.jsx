@@ -174,7 +174,7 @@ const Notification = () => {
                 <div className="flex-1">
                   <h2 className="text-xl font-semibold text-gray-800">{notification.title}</h2>
                   <p className="text-gray-600">by {notification.author || "Unknown"}</p>
-                  <p className="text-gray-600">Price: ${notification.price || "N/A"}</p>
+                  <p className="text-gray-600">Price: ₹{notification.price || "N/A"}</p>
                   <p className="text-green-600 mt-1">You purchased this book! 🎉 {notification.description}</p>
                 </div>
                 <button
