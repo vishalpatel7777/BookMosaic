@@ -5,6 +5,10 @@ import "../../assets/login-page/login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomAlert from "../Alert/CustomAlert";
+import Loginbg from "../../assets/login-page/login-bg.png";
+import LoginBook from "../../assets/login-page/loginbook.png";
+import LoginBoxBook from "../../assets/login-page/book-box.png";
+import LoginSitting from "../../assets/login-page/personsitting.png";
 
 
 const API_URL = "https://bookmosaic.onrender.com"; // Hardcoded for now
@@ -84,11 +88,11 @@ const Login = () => {
 
   return (
     <div className="background-img relative min-h-screen pt-[121px]">
-      <img src="../src/assets/login-page/login-bg.png" alt="background-img" />
+      <img src={Loginbg} alt="background-img" />
       <div className="login-header">
-        <img src="../src/assets/login-page/loginbook.png" alt="login1" className="left" />
+        <img src={LoginBook} alt="login1" className="left" />
         <h1 className="login">Login</h1>
-        <img src="../src/assets/login-page/loginbook.png" alt="login2" className="right" />
+        <img src={LoginBook} alt="login2" className="right" />
       </div>
       <div className="login-box">
         <label htmlFor="email" className="email">Email: </label>
@@ -116,7 +120,7 @@ const Login = () => {
         <button type="submit" className="loginbtn" onClick={submit}>Login</button>
         <button className="resetpassword" onClick={() => setShowResetPrompt(true)}>Reset Password</button>
         <a href="signup"><button className="Registration-btn">New Registration?</button></a>
-        <img src="../src/assets/login-page/book-box.png" alt="book" className="book" />
+        <img src={LoginBoxBook} alt="book" className="book" />
       </div>
       {showResetPrompt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -147,7 +151,7 @@ const Login = () => {
         </div>
       )}
       <div className="login-right">
-        <img src="../src/assets/login-page/personsitting.png" alt="sitting" className="sitting" />
+        <img src={LoginSitting} alt="sitting" className="sitting" />
       </div>
       {showAlert && <CustomAlert message={alertMessage} onClose={() => setShowAlert(false)} />}
     </div>

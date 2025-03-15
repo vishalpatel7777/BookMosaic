@@ -31,7 +31,7 @@ import AdminNavbar from "../components/Admin/AdminNav";
 import AdminHome from "../components/Admin/AdminHome";
 import AdminDashboard from "../components/Admin/AdminDashboard";
 import DailyStats from "../components/Admin/DashBoard/DailyStats";
-import UserActivity from "../components/Admin/Dashboard/UserActivity";
+import UserActivity from "../components/Admin/DashBoard/UserActivity";
 import BookAnalytics from "../components/Admin/Dashboard/BookAnalytics";
 import MonthlyAnalytics from '../components/Admin/Dashboard/MonthlyStats';
 import AdminBooks from "../components/Admin/EditBook";
