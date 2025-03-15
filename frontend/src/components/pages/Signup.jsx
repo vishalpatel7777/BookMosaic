@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import 'react-phone-input-2/lib/style.css';
 import ImageUpload from "../Profile/ImageUpload";
 import CustomAlert from "../Alert/CustomAlert";
+import SignupSitting2 from "../../assets/signup-page/siiting.png";
+import SignupSitting1 from "../../assets/signup-page/sitting.png";
+import SignupBg from "../../assets/signup-page/background.png";
+import SignupBook from "../../assets/signup-page/book-box.png";
+
 
 const API_URL = "https://bookmosaic.onrender.com";
 
@@ -123,11 +128,11 @@ const Signup = () => {
   return (
     <main className='all relative min-h-screen pt-[121px]'>
       <div className="background-img">
-        <img src="../src/assets/signup-page/background.png" alt="background-img" className="img" />
+        <img src={SignupBg} alt="background-img" className="img" />
         <div className="signup-header">
-          <img src="../src/assets/signup-page/book-box.png" alt="signup1" className="left" />
+          <img src={SignupBook} alt="signup1" className="left" />
           <h1 className="signup">Signup</h1>
-          <img src="../src/assets/signup-page/book-box.png" alt="signup2" className="right" />
+          <img src={SignupBook} alt="signup2" className="right" />
         </div>
 
         <div className="signup-box">
@@ -186,8 +191,8 @@ const Signup = () => {
         </div>
 
         <div className="signup-right">
-          <img src="../src/assets/signup-page/siiting.png" alt="sitting" className="sitting2" />
-          <img src="../src/assets/signup-page/sitting.png" alt="sitting" className="sitting1" />
+          <img src={SignupSitting2} alt="sitting" className="sitting2" />
+          <img src={SignupSitting1} alt="sitting" className="sitting1" />
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateRoutes } from "../../store/routesSlice";
 import BookCard from "../BookCard/BookCard";
+import BookMosaicLogo from "../../assets/home-page/l.png"
 
 const API_URL = "https://bookmosaic.onrender.com";
 
@@ -43,7 +44,7 @@ const Navbar = () => {
   return (
     <nav className="navbar fixed top-0 left-0 w-full bg-white z-50 p-4 flex justify-between items-center">
       <div className="logo-container">
-        <img src="../src/assets/home-page/l.png" alt="BookMosaic Logo" className="w-20" />
+        <img src={BookMosaicLogo} alt="BookMosaic Logo" className="w-20" />
       </div>
       <ul className="nav-links flex gap-4">
         {routes.map((route) => (

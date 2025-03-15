@@ -1,5 +1,6 @@
 import React from "react";
 import RecommendedBooks from "../Category/RecommendedBooks";
+import HomeBookShelf from "../../assets/home-page/book.png";
 
 function Home() {
   return (
@@ -29,7 +30,7 @@ function Home() {
             </div>
             <div className="relative top-66 left-10">
               <img
-                src="../src/assets/home-page/book.png"
+                src={HomeBookShelf}
                 alt="Bookshelf"
                 className="max-w-[500px] h-auto"
               />

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AdminhomeBg from "../../assets/admin/home-page.png";
 
 const API_URL = "https://bookmosaic.onrender.com";
 
@@ -25,7 +26,7 @@ const Adminhome = () => {
           </div>
           <div className="relative top-6 right-40">
             <img
-              src="../../src/assets/admin/home-page.png"
+              src={AdminhomeBg}
               alt="Bookshelf"
               className="max-w-[500px] h-auto"
             />
