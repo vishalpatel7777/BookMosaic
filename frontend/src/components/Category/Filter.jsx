@@ -58,16 +58,15 @@ const Filter = () => {
 
     setLoading(true);
     try {
-      const selectedGenre = selectedGenres[0];
       const sanitizeGenre = (genre) => genre.replace(/[’‘]/g, "'");
-      const sanitizedGenre = sanitizeGenre(selectedGenre);
-      const apiUrl = `${API_URL}/api/v1/get-books-by-genre?genre=${encodeURIComponent(sanitizedGenre)}`;
+      const sanitizedGenres = selectedGenres.map(sanitizeGenre);
+      const apiUrl = `${API_URL}/api/v1/get-books-by-genre?genres=${encodeURIComponent(sanitizedGenres.join(','))}`;
       const response = await axios.get(apiUrl);
       setBooks(response.data.data || []);
     } catch (error) {
       console.error("Error fetching books:", error);
       setBooks([]);
-      setAlertMessage("Error fetching books.");
+      setAlertMessage(error.response?.data?.message || "Error fetching books.");
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 2000);
     } finally {
@@ -120,7 +119,7 @@ const Filter = () => {
           </div>
         )}
         {!loading && books && books.length === 0 && (
-          <p className="text-center text-gray-500 mt-6">No books found for selected genre.</p>
+          <p className="text-center text-gray-500 mt-6">No books found for selected genres.</p>
         )}
       </div>
       {showAlert && (

@@ -30,7 +30,7 @@ function Home() {
                 Order Now
               </div>
             </div>
-            <div className="relative top-60 left-10">
+            <div className="relative top-62 left-10">
               <img
                 src={HomeBookShelf}
                 alt="Bookshelf"

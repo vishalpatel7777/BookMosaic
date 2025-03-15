@@ -22,6 +22,10 @@ const ViewBookDetails = () => {
   const role = useSelector((state) => state.auth.role);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  
+  // Define max length for truncated description
+  const DESCRIPTION_MAX_LENGTH = 150;
 
   useEffect(() => {
     const fetch = async () => {
@@ -96,6 +100,13 @@ const ViewBookDetails = () => {
     );
   };
 
+  const getTruncatedDescription = (desc) => {
+    if (!desc) return "";
+    return desc.length > DESCRIPTION_MAX_LENGTH && !showFullDescription
+      ? `${desc.substring(0, DESCRIPTION_MAX_LENGTH)}...`
+      : desc;
+  };
+
   return (
     <>
       {Book === null && (
@@ -132,7 +143,15 @@ const ViewBookDetails = () => {
             </p>
             <p className="text-black mt-4 text-2xl">
               <span className="font-semibold">Description : </span>
-              {Book.desc}
+              {getTruncatedDescription(Book.desc)}
+              {Book.desc && Book.desc.length > DESCRIPTION_MAX_LENGTH && (
+                <button
+                  className="text-blue-700 hover:text-blue-600 ml-2 font-medium"
+                  onClick={() => setShowFullDescription(!showFullDescription)}
+                >
+                  {showFullDescription ? "Read Less" : "Read More"}
+                </button>
+              )}
             </p>
             <a
               href={Book.url}
@@ -144,7 +163,7 @@ const ViewBookDetails = () => {
               Get more Info
             </a>
             <p className="text-black mt-4 text-2xl flex">
-              Rating: &nbsp; {renderStars(Book.ratings)}
+              Rating:   {renderStars(Book.ratings)}
             </p>
 
             {isLoggedIn === true && role === "user" && (

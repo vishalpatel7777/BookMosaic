@@ -20,21 +20,25 @@ const addRatingsToBooks = async (books) => {
 };
 
 router.get("/get-books-by-genre", async (req, res) => {
-  const { genre, limit = 10 } = req.query || {};
+  const { genres, limit = 10 } = req.query || {};
 
   try {
-    if (!genre) {
-      return res.status(400).json({ message: "Genre parameter is required" });
+    if (!genres) {
+      return res.status(400).json({ message: "Genres parameter is required" });
     }
 
-    const books = await Book.find({ genre: { $regex: genre, $options: "i" } })
+    const genreArray = genres.split(",").map((genre) => genre.trim());
+
+    const books = await Book.find({ 
+      genre: { $in: genreArray.map((g) => new RegExp(g, "i")) }
+    })
       .sort({ createdAt: -1 })
       .limit(parseInt(limit) || 10);
 
     if (!books || books.length === 0) {
       return res
         .status(404)
-        .json({ message: "No books found for this genre", data: [] });
+        .json({ message: "No books found for these genres", data: [] });
     }
 
     const booksWithRatings = await addRatingsToBooks(books);
