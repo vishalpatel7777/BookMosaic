@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import "../../assets/welcome-page/welcome.css";
+import WelcomeVideo from "../../assets/welcome-page/banner.mp4";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://bookmosaic.onrender.com";
 
 function Welcome() {
+  const navigate = useNavigate();
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -14,10 +17,12 @@ function Welcome() {
   return (
     <main className="welcome-page">
       <video autoPlay muted className="bg-welcome">
-        <source src="../src/assets/welcome-page/banner.mp4" type="video/mp4" />
+        <source src={WelcomeVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <a href="/home"><button className='go-button'>Here you go</button></a>
+      <button className="go-button" onClick={() => navigate("/home")}>
+        Here you go
+      </button>
     </main>
   );
 }

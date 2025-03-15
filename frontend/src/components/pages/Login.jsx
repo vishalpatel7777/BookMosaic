@@ -119,7 +119,7 @@ const Login = () => {
         />
         <button type="submit" className="loginbtn" onClick={submit}>Login</button>
         <button className="resetpassword" onClick={() => setShowResetPrompt(true)}>Reset Password</button>
-        <a href="signup"><button className="Registration-btn">New Registration?</button></a>
+        <button className="Registration-btn" onClick={() => navigate("/signup")}>New Registration?</button>
         <img src={LoginBoxBook} alt="book" className="book" />
       </div>
       {showResetPrompt && (

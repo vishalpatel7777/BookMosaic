@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import BookCard from "../BookCard/BookCard";
 import Loader from "../Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://bookmosaic.onrender.com";
 
@@ -12,6 +13,7 @@ const RecommendedBooks = () => {
   const sliderRef = useRef(null);
   const bookCardWidth = 350;
 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchRecommendedBooks = async () => {
       try {
@@ -22,7 +24,10 @@ const RecommendedBooks = () => {
         if (!headers.id || !headers.authorization) {
           throw new Error("User not logged in");
         }
-        const response = await axios.get(`${API_URL}/api/v1/get-recommended-books`, { headers });
+        const response = await axios.get(
+          `${API_URL}/api/v1/get-recommended-books`,
+          { headers }
+        );
         setBooks(response.data.data || []);
       } catch (error) {
         console.error("Error fetching recommended books:", error);
@@ -35,7 +40,9 @@ const RecommendedBooks = () => {
   }, []);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + books.length) % books.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + books.length) % books.length
+    );
   };
 
   const handleNext = () => {
@@ -46,13 +53,17 @@ const RecommendedBooks = () => {
     <div className="mt-8 px-4 overflow-x-hidden">
       <div className="border-b-4 border-gray-400 flex items-center gap-4 px-4 pb-2">
         <span className="material-symbols-outlined text-4xl">recommend</span>
-        <h2 className="text-3xl font-semibold font-caveat">Recommended Books</h2>
-        <a href="/allbooks">
+        <h2 className="text-3xl font-semibold font-caveat">
+          Recommended Books
+        </h2>
+       <div onClick={() => navigate("/allbooks")}>
           <div className="ml-auto flex items-center cursor-pointer">
             <h3 className="text-2xl">See all</h3>
-            <span className="material-symbols-outlined text-2xl ml-2">keyboard_double_arrow_right</span>
+            <span className="material-symbols-outlined text-2xl ml-2">
+              keyboard_double_arrow_right
+            </span>
           </div>
-        </a>
+          </div>
       </div>
       {loading && (
         <div className="flex items-center justify-center mt-6">
@@ -61,13 +72,24 @@ const RecommendedBooks = () => {
       )}
       {!loading && books && books.length > 0 ? (
         <div className="relative my-9">
-          <div ref={sliderRef} className="overflow-hidden w-full" style={{ maxWidth: `${bookCardWidth}px`, margin: "0 auto" }}>
+          <div
+            ref={sliderRef}
+            className="overflow-hidden w-full"
+            style={{ maxWidth: `${bookCardWidth}px`, margin: "0 auto" }}
+          >
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * bookCardWidth}px)`, width: `${books.length * bookCardWidth}px` }}
+              style={{
+                transform: `translateX(-${currentIndex * bookCardWidth}px)`,
+                width: `${books.length * bookCardWidth}px`,
+              }}
             >
               {books.map((item, i) => (
-                <div key={i} className="flex-shrink-0" style={{ width: `${bookCardWidth}px` }}>
+                <div
+                  key={i}
+                  className="flex-shrink-0"
+                  style={{ width: `${bookCardWidth}px` }}
+                >
                   <BookCard data={item} />
                 </div>
               ))}
@@ -92,7 +114,9 @@ const RecommendedBooks = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}
-                    className={`w-3 h-3 rounded-full ${i === currentIndex ? "bg-gray-800" : "bg-gray-400"}`}
+                    className={`w-3 h-3 rounded-full ${
+                      i === currentIndex ? "bg-gray-800" : "bg-gray-400"
+                    }`}
                   />
                 ))}
               </div>
@@ -100,7 +124,11 @@ const RecommendedBooks = () => {
           )}
         </div>
       ) : (
-        !loading && <p className="text-center text-gray-500 mt-6">No recommendations available</p>
+        !loading && (
+          <p className="text-center text-gray-500 mt-6">
+            No recommendations available
+          </p>
+        )
       )}
     </div>
   );

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BookCard from "../BookCard/BookCard";
 import Loader from "../Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://bookmosaic.onrender.com";
 
 const Recentlyaddedbook = () => {
   const [Book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -28,13 +29,19 @@ const Recentlyaddedbook = () => {
     <div className="mt-8 px-4 overflow-x-hidden">
       <div className="border-b-4 border-gray-400 flex items-center gap-4 px-4 pb-2">
         <span className="material-symbols-outlined text-4xl">family_star</span>
-        <h2 className="text-3xl font-semibold font-caveat">Recently Added Books</h2>
-        <a href="/allbooks">
+        <h2 className="text-3xl font-semibold font-caveat">
+          Recently Added Books
+        </h2>
+     
+        <div onClick={() => navigate("/allbooks")}>
           <div className="ml-260 flex items-center cursor-pointer">
             <h3 className="text-2xl">See all</h3>
-            <span className="material-symbols-outlined text-2xl ml-2">keyboard_double_arrow_right</span>
+            <span className="material-symbols-outlined text-2xl ml-2">
+              keyboard_double_arrow_right
+            </span>
           </div>
-        </a>
+          </div>
+       
       </div>
       {loading && (
         <div className="flex items-center justify-center mt-6">
@@ -44,11 +51,15 @@ const Recentlyaddedbook = () => {
       {!loading && Book && Book.length > 0 ? (
         <div className="my-9 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {Book.map((item, i) => (
-            <div key={i}><BookCard data={item} /></div>
+            <div key={i}>
+              <BookCard data={item} />
+            </div>
           ))}
         </div>
       ) : (
-        !loading && <p className="text-center text-gray-500 mt-6">No books available</p>
+        !loading && (
+          <p className="text-center text-gray-500 mt-6">No books available</p>
+        )
       )}
     </div>
   );

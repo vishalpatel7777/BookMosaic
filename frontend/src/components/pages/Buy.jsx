@@ -167,6 +167,7 @@ const Buy = () => {
                 >
                   Buy
                 </button>
+                
               </div>
             )}
           </div>
