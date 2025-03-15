@@ -26,7 +26,7 @@ import Favorite from "../components/pages/Wishlistmy";
 import Buy from "../components/pages/Buy";
 import Checkout from "../components/payment/Checkout";
 import ResetPassword from "../components/pages/ResetPassword";
-import PaymentSuccess from "../components/Payment/PaymentSuccess";
+import PaymentSuccess from "../components/payment/PaymentSuccess";
 import AdminNavbar from "../components/Admin/AdminNav";
 import AdminHome from "../components/Admin/AdminHome";
 import AdminDashboard from "../components/Admin/AdminDashboard";
