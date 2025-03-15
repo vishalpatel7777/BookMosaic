@@ -4,8 +4,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
- "start": "nodemon index.js "
-  },
+    "start": "node app.js "
+    },
   "dependencies": {
     "@cashfreepayments/cashfree-js": "^1.0.5",
     "axios": "^1.8.3",
