@@ -14,6 +14,8 @@ const adminRoutes = require("./routes/adminRoutes");
 const payment = require("./routes/payment");
 const order = require("./routes/order");
 
+const path = require("path");
+
 app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
 app.use(express.json());
 
@@ -26,7 +28,8 @@ app.use("/api/v1", Filter);
 app.use("/api/v1", adminRoutes);
 app.use("/api/v1", payment);
 app.use("/api/v1", order);
-app.use("/uploads", express.static("uploads"));
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

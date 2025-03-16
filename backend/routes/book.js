@@ -140,8 +140,9 @@ router.put("/update-book/:id", authenticateToken, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
-  }
+    }
 });
+
 
 router.delete("/delete-book", authenticateToken, async (req, res) => {
   try {
