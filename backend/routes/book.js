@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/uploads";
+const uploadDir = "/opt/render/uploads"; // In book.js
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

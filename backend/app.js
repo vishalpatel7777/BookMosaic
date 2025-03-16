@@ -33,7 +33,7 @@ app.use("/api/v1", order);
 app.use("/uploads", (req, res, next) => {
   console.log("Requesting:", req.path);
   next();
-}, express.static("/uploads"));
+}, express.static("/opt/render/uploads"));
 
 console.log("Checking /uploads at startup:", fs.existsSync("/uploads"));
 
