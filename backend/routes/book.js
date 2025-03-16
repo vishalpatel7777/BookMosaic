@@ -8,10 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+const uploadDir = "/uploads"; 
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -95,7 +92,6 @@ router.post(
     }
   }
 );
-
 
 router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {
