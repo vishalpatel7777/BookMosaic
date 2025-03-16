@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/opt/render/uploads"; // In book.js
+const uploadDir = "/uploads"; // Match the Render disk mount path
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -73,7 +73,7 @@ router.post(
           .json({ message: "Title, author, price, and PDF are required" });
       }
 
-      const pdfPath = `/uploads/${req.file.filename}`;
+      const pdfPath = `/uploads/${req.file.filename}`; // Matches URL prefix
       const fullPath = path.join(uploadDir, req.file.filename);
       console.log("PDF saved at:", fullPath);
       console.log("File exists after upload:", fs.existsSync(fullPath));
@@ -97,11 +97,11 @@ router.post(
 
 router.get("/list-uploads", async (req, res) => {
   try {
-    const files = fs.readdirSync("/uploads");
-    console.log("Files in /uploads:", files);
+    const files = fs.readdirSync(uploadDir); // Use uploadDir instead of hardcoding
+    console.log("Files in", uploadDir, ":", files);
     res.json(files);
   } catch (error) {
-    console.error("Error listing /uploads:", error.message);
+    console.error("Error listing", uploadDir, ":", error.message);
     res.status(500).json({ message: "Error listing files" });
   }
 });
@@ -151,9 +151,8 @@ router.put("/update-book/:id", authenticateToken, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
-    }
+  }
 });
-
 
 router.delete("/delete-book", authenticateToken, async (req, res) => {
   try {

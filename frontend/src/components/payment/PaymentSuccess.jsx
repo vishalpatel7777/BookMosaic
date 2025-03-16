@@ -10,6 +10,7 @@ const PaymentSuccess = () => {
   const { book } = state || {};
   const userId = localStorage.getItem("id");
   const securePdfUrl = `${API_URL}${book?.pdf}`;
+  console.log(securePdfUrl);
   const hasRun = useRef(false);
 
   useEffect(() => {
