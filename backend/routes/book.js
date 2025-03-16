@@ -8,72 +8,52 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/uploads"; // Match the Render disk mount path
+const uploadDir = "/uploads";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("Setting upload destination:", uploadDir);
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const filename = `${Date.now()}-${file.originalname}`;
+    console.log("Generated filename:", filename);
+    cb(null, filename);
   },
 });
 
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 },
-});
+}).single("pdf");
 
-const addRatingsToBooks = async (books) => {
-  const ratings = await Rating.aggregate([
-    {
-      $group: {
-        _id: "$book",
-        averageRating: { $avg: "$rate" },
-      },
-    },
-  ]);
-
-  const ratingsMap = ratings.reduce((acc, { _id, averageRating }) => {
-    acc[_id.toString()] = Number(averageRating.toFixed(1)) || 0;
-    return acc;
-  }, {});
-
-  return books.map((book) => {
-    const avgRating = ratingsMap[book._id.toString()] || 0;
-    return {
-      ...book.toObject(),
-      ratings: avgRating,
-    };
-  });
-};
-
-router.post(
-  "/add-book",
-  authenticateToken,
-  upload.single("pdf"),
-  async (req, res) => {
+router.post("/add-book", authenticateToken, (req, res) => {
+  console.log("Starting /add-book request");
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error("Multer error:", err.message);
+      return res.status(500).json({ message: "Upload error", error: err.message });
+    }
     try {
       const { id } = req.headers || {};
+      console.log("User ID from headers:", id);
       if (!id) {
         return res.status(400).json({ message: "Missing user ID in headers" });
       }
 
       const user = await User.findById(id);
+      console.log("User found:", !!user, "Role:", user?.role);
       if (!user || user.role !== "admin") {
-        return res
-          .status(403)
-          .json({ message: "You are not authorized to add a book" });
+        return res.status(403).json({ message: "You are not authorized to add a book" });
       }
 
       const { title, author, price } = req.body || {};
+      console.log("Request body:", { title, author, price }, "File:", !!req.file);
       if (!title || !author || !price || !req.file) {
-        return res
-          .status(400)
-          .json({ message: "Title, author, price, and PDF are required" });
+        return res.status(400).json({ message: "Title, author, price, and PDF are required" });
       }
 
-      const pdfPath = `/uploads/${req.file.filename}`; // Matches URL prefix
+      const pdfPath = `/uploads/${req.file.filename}`;
       const fullPath = path.join(uploadDir, req.file.filename);
       console.log("PDF saved at:", fullPath);
       console.log("File exists after upload:", fs.existsSync(fullPath));
@@ -83,21 +63,22 @@ router.post(
       });
 
       await book.save();
+      console.log("Book saved with ID:", book._id);
       const bookWithRatings = await addRatingsToBooks([book]);
       return res.status(201).json({
         message: "Book added successfully",
         data: bookWithRatings[0] || {},
       });
     } catch (error) {
-      console.error(error.message);
+      console.error("Error in /add-book:", error.message);
       return res.status(500).json({ message: "Internal server error" });
     }
-  }
-);
+  });
+});
 
 router.get("/list-uploads", async (req, res) => {
   try {
-    const files = fs.readdirSync(uploadDir); // Use uploadDir instead of hardcoding
+    const files = fs.readdirSync(uploadDir);
     console.log("Files in", uploadDir, ":", files);
     res.json(files);
   } catch (error) {
@@ -105,6 +86,7 @@ router.get("/list-uploads", async (req, res) => {
     res.status(500).json({ message: "Error listing files" });
   }
 });
+
 
 router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {

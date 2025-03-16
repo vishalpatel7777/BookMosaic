@@ -33,9 +33,11 @@ app.use("/api/v1", order);
 app.use("/uploads", (req, res, next) => {
   console.log("Requesting:", req.path);
   next();
-}, express.static("/uploads")); // Match the disk mount path
+}, express.static("/uploads"));
 
 console.log("Checking /uploads at startup:", fs.existsSync("/uploads"));
+console.log("Checking /tmp at startup:", fs.existsSync("/tmp")); // Check a known writable dir
+console.log("Root dir contents:", fs.readdirSync("/").join(", ")); // See what’s available
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
