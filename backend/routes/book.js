@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = path.join(__dirname, "../uploads");
+const uploadDir = "/uploads";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -77,6 +77,7 @@ router.post(
       }
 
       const pdfPath = `/uploads/${req.file.filename}`;
+      console.log("PDF saved at:", path.join(uploadDir, req.file.filename)); // Debug log
       const book = new Book({
         ...(req.body || {}),
         pdf: pdfPath,
@@ -94,6 +95,7 @@ router.post(
     }
   }
 );
+
 
 router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {

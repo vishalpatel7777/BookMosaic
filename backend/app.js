@@ -29,7 +29,7 @@ app.use("/api/v1", adminRoutes);
 app.use("/api/v1", payment);
 app.use("/api/v1", order);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static("/uploads"));
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

@@ -12,7 +12,7 @@ const bookSchema = new mongoose.Schema(
     language: { type: String, required: true },
     image: { type: String, required: true },
     ratings: { type: Number, min: 1, max: 5, default: 0 },
-    pdf: { type: Object, required: true },
+    pdf: { type: String, required: true },
   },
   { timestamps: true }
 );
