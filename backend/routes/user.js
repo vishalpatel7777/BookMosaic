@@ -121,7 +121,7 @@ router.post("/signup", async (req, res) => {
             <p>Best Regards,<br><strong>The bookMosaic Team</strong></p>
             <hr>
             <p style="font-size: 12px; color: #888;">📩 Need help? Contact us at <a href="mailto:${process.env.EMAIL_USER}">${process.env.EMAIL_USER}</a></p>
-            <p style="font-size: 12px; color: #888;">🌍 Visit us: <a href="https://www.bookMosaic.com">www.bookMosaic.com</a></p>
+            <p style="font-size: 12px; color: #888;">🌍 Visit us: <a href="https://bookmosaic.netlify.app/">www.bookMosaic.com</a></p>
         </div>
       `,
     };
@@ -162,7 +162,7 @@ router.get("/verify-email/:token", async (req, res) => {
             <div class="container">
                 <h1>⚠️ Invalid or Expired Link</h1>
                 <p>The verification link is invalid or has expired.</p>
-                <a href="https://www.bookMosaic.com">Go to bookMosaic</a>
+                <a href="https://bookmosaic.netlify.app/">Go to bookMosaic</a>
             </div>
         </body>
         </html>
@@ -170,14 +170,14 @@ router.get("/verify-email/:token", async (req, res) => {
     }
 
     if (user.isVerified) {
-      return res.redirect("https://www.bookMosaic.com/email-already-verified");
+      return res.redirect("https://bookmosaic.netlify.app/email-already-verified");
     }
 
     user.isVerified = true;
     user.verificationToken = null;
     await user.save();
 
-    return res.redirect("https://www.bookMosaic.com/verification-success");
+    return res.redirect("https://bookmosaic.netlify.app/verification-success");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
