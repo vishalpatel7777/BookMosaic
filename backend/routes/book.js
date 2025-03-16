@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/uploads";
+const uploadDir = "/tmp"; // Switch to tmp for now
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,6 +26,31 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 },
 }).single("pdf");
+
+// Re-add addRatingsToBooks (was missing)
+const addRatingsToBooks = async (books) => {
+  const ratings = await Rating.aggregate([
+    {
+      $group: {
+        _id: "$book",
+        averageRating: { $avg: "$rate" },
+      },
+    },
+  ]);
+
+  const ratingsMap = ratings.reduce((acc, { _id, averageRating }) => {
+    acc[_id.toString()] = Number(averageRating.toFixed(1)) || 0;
+    return acc;
+  }, {});
+
+  return books.map((book) => {
+    const avgRating = ratingsMap[book._id.toString()] || 0;
+    return {
+      ...book.toObject(),
+      ratings: avgRating,
+    };
+  });
+};
 
 router.post("/add-book", authenticateToken, (req, res) => {
   console.log("Starting /add-book request");
@@ -53,7 +78,7 @@ router.post("/add-book", authenticateToken, (req, res) => {
         return res.status(400).json({ message: "Title, author, price, and PDF are required" });
       }
 
-      const pdfPath = `/uploads/${req.file.filename}`;
+      const pdfPath = `/uploads/${req.file.filename}`; // Keep URL consistent
       const fullPath = path.join(uploadDir, req.file.filename);
       console.log("PDF saved at:", fullPath);
       console.log("File exists after upload:", fs.existsSync(fullPath));
