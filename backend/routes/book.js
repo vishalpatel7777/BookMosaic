@@ -74,7 +74,9 @@ router.post(
       }
 
       const pdfPath = `/uploads/${req.file.filename}`;
-      console.log("PDF saved at:", path.join(uploadDir, req.file.filename)); // Debug log
+      const fullPath = path.join(uploadDir, req.file.filename);
+      console.log("PDF saved at:", fullPath); // Log the exact file path
+      console.log("File exists after upload:", fs.existsSync(fullPath)); // Check if file exists immediately
       const book = new Book({
         ...(req.body || {}),
         pdf: pdfPath,
