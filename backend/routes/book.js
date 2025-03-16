@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/uploads"; 
+const uploadDir = "/uploads";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -75,8 +75,8 @@ router.post(
 
       const pdfPath = `/uploads/${req.file.filename}`;
       const fullPath = path.join(uploadDir, req.file.filename);
-      console.log("PDF saved at:", fullPath); // Log the exact file path
-      console.log("File exists after upload:", fs.existsSync(fullPath)); // Check if file exists immediately
+      console.log("PDF saved at:", fullPath);
+      console.log("File exists after upload:", fs.existsSync(fullPath));
       const book = new Book({
         ...(req.body || {}),
         pdf: pdfPath,
@@ -94,6 +94,17 @@ router.post(
     }
   }
 );
+
+router.get("/list-uploads", async (req, res) => {
+  try {
+    const files = fs.readdirSync("/uploads");
+    console.log("Files in /uploads:", files);
+    res.json(files);
+  } catch (error) {
+    console.error("Error listing /uploads:", error.message);
+    res.status(500).json({ message: "Error listing files" });
+  }
+});
 
 router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {
