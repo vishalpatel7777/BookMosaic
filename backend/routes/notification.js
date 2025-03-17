@@ -203,71 +203,19 @@ router.get("/get-review/:userId/:bookId", async (req, res) => {
 
 router.get("/get-recommended-books", async (req, res) => {
   try {
-    const userId = req.headers.id || ""; 
-
-    
+   
     const ratings = await Rating.find().populate("user book");
     const validRatings = ratings.filter((r) => r.user && r.book);
     const allBooks = await Book.find();
 
-    
-    const getTopRatedBooksByMaxRating = async (limit = 4, excludeIds = []) => {
-      const ratingStats = await Rating.aggregate([
-        {
-          $match: {
-            book: { $nin: excludeIds.map((id) => new mongoose.Types.ObjectId(id)) },
-          },
-        },
-        {
-          $group: {
-            _id: "$book",
-            avgRating: { $avg: "$rate" },
-            count: { $sum: 1 },
-            latestRating: { $max: "$createdAt" }, 
-          },
-        },
-        { $sort: { avgRating: -1, latestRating: -1 } }, 
-        { $limit: limit },
-      ]);
-      const topBookIds = ratingStats.map((stat) => stat._id);
-      let topBooks = await Book.find({ _id: { $in: topBookIds } });
-      topBooks = await addRatingsToBooks(topBooks);
-      return topBooks.map((book) => {
-        const stat = ratingStats.find((s) => s._id.toString() === book._id.toString());
-        return {
-          ...book,
-          avgRating: stat ? stat.avgRating : 0,
-          ratingCount: stat ? stat.count : 0,
-          latestRating: stat ? stat.latestRating : null,
-          isRated: excludeIds.includes(book._id.toString()),
-        };
-      });
-    };
-
-   
+    // If no ratings exist, return 4 most recent books
     if (!validRatings.length) {
       const recentBooks = await Book.find().sort({ createdAt: -1 }).limit(4);
       const recentBooksWithRatings = await addRatingsToBooks(recentBooks);
       return res.status(200).json({ data: recentBooksWithRatings });
     }
 
-  
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      const topRatedBooks = await getTopRatedBooksByMaxRating(4);
-      return res.status(200).json({ data: topRatedBooks });
-    }
-
-  
-    const userRatings = await Rating.find({ user: userId });
-    const userRatedBookIds = userRatings.map((r) => r.book.toString());
-
-  
-    if (!userRatings.length) {
-      const topRatedBooks = await getTopRatedBooksByMaxRating(4);
-      return res.status(200).json({ data: topRatedBooks });
-    }
-
-    
+    // Aggregate all rated books with their average ratings
     const ratedBookStats = await Rating.aggregate([
       {
         $group: {
@@ -277,36 +225,33 @@ router.get("/get-recommended-books", async (req, res) => {
           latestRating: { $max: "$createdAt" },
         },
       },
-      { $sort: { avgRating: -1, latestRating: -1 } },
+      { $sort: { avgRating: -1, latestRating: -1 } }, // Sort by avgRating, then recency for ties
     ]);
 
     let recommendedBooks = [];
     const ratedBookIds = ratedBookStats.map((stat) => stat._id.toString());
 
-   
+    // Fetch rated books
     let ratedBooks = await Book.find({ _id: { $in: ratedBookIds } });
     ratedBooks = await addRatingsToBooks(ratedBooks);
 
-   
+    // Map and sort rated books
     recommendedBooks = ratedBooks.map((book) => {
       const stat = ratedBookStats.find((s) => s._id.toString() === book._id.toString());
-      const userRating = userRatings.find((r) => r.book.toString() === book._id.toString());
       return {
         ...book,
         avgRating: stat ? stat.avgRating : 0,
         ratingCount: stat ? stat.count : 0,
         latestRating: stat ? stat.latestRating : null,
-        isRated: userRatedBookIds.includes(book._id.toString()),
-        userRating: userRating ? userRating.rate : null,
       };
     }).sort((a, b) => {
       if (b.avgRating === a.avgRating) {
-        return new Date(b.latestRating) - new Date(a.latestRating); 
+        return new Date(b.latestRating) - new Date(a.latestRating); // Tie-break by recency
       }
-      return b.avgRating - a.avgRating; 
+      return b.avgRating - a.avgRating; // Primary sort by avgRating
     });
 
- 
+    // Fill up to 4 with recent books if needed
     const numRatedBooks = recommendedBooks.length;
     if (numRatedBooks < 4) {
       const remaining = 4 - numRatedBooks;
@@ -323,8 +268,6 @@ router.get("/get-recommended-books", async (req, res) => {
           avgRating: book.ratings || 0,
           ratingCount: 0,
           latestRating: null,
-          isRated: false,
-          userRating: null,
         })),
       ].slice(0, 4);
     } else {

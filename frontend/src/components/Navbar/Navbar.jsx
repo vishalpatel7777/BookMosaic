@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react"; 
+import { Link, useLocation } from "react-router-dom"; 
 import { useSelector, useDispatch } from "react-redux";
 import { updateRoutes } from "../../store/routesSlice";
 import BookCard from "../BookCard/BookCard";
-import BookMosaicLogo from "../../assets/home-page/l.png"
+import BookMosaicLogo from "../../assets/home-page/l.png";
 
 const API_URL = "https://bookmosaic.onrender.com";
 
@@ -13,10 +13,33 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const routes = useSelector((state) => state.routes);
+  const location = useLocation(); 
+  const searchRef = useRef(null); 
 
+ 
   useEffect(() => {
     dispatch(updateRoutes({ isLoggedIn }));
   }, [isLoggedIn, dispatch]);
+
+
+  useEffect(() => {
+    setQuery("");
+    setBooks([]);
+  }, [location.pathname]);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setBooks([]);
+        setQuery("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = async (e) => {
     const searchValue = e.target.value;
@@ -66,7 +89,7 @@ const Navbar = () => {
           </Link>
         </div>
       )}
-      <div className="relative">
+      <div className="relative" ref={searchRef}>
         <input
           type="text"
           placeholder="Find your Book"

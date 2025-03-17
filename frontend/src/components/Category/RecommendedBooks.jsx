@@ -22,7 +22,6 @@ const RecommendedBooks = () => {
           id: localStorage.getItem("id"),
           authorization: `Bearer ${localStorage.getItem("token")}`,
         };
-        // No validation for login status; proceed with API call regardless
         const response = await axios.get(
           `${API_URL}/api/v1/get-recommended-books`,
           { headers }
