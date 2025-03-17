@@ -25,7 +25,7 @@ const Signup = () => {
     genre: "",
     fullname: "",
     phone: "",
-    image: "",
+    image: "", 
   });
 
   const navigate = useNavigate();
@@ -78,7 +78,8 @@ const Signup = () => {
     }
   };
 
-  const validateStep2 = async () => {
+  const validateAndSubmit = async () => {
+   
     if (!Values.phone || Values.phone.length !== 10 || !/^\d{10}$/.test(Values.phone)) {
       setAlertMessage("Phone number must be exactly 10 digits.");
       setShowAlert(true);
@@ -103,42 +104,16 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/api/v1/validate-step2`, {
+    
+      const step2Response = await axios.post(`${API_URL}/api/v1/validate-step2`, {
         phone: Values.phone,
         password: Values.password,
       });
-      setAlertMessage(response.data.message);
+      setAlertMessage(step2Response.data.message);
       setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-        setStep(3);
-      }, 2000);
-    } catch (error) {
-      setAlertMessage(error.response?.data?.message || "Error validating Step 2");
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 2000);
-    }
-  };
 
-  const submit = async () => {
-    if (!validatePassword(Values.password)) {
-      setAlertMessage(
-        "Password must be 6+ characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character (e.g., !@#$%^&*)"
-      );
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 2000);
-      return;
-    }
-
-    if (Values.password !== Values.confirmPassword) {
-      setAlertMessage("Passwords do not match");
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 2000);
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${API_URL}/api/v1/signup`, Values);
+      
+      const signupResponse = await axios.post(`${API_URL}/api/v1/signup`, Values);
       setAlertMessage("Signup successful! Please check your email to verify your account.");
       setShowAlert(true);
       setTimeout(() => {
@@ -212,14 +187,7 @@ const Signup = () => {
               <div className='signup-image relative text-[23px] right-[920px] top-40'>
                 <ImageUpload onImageSelect={(image) => setValues({ ...Values, image })} />
               </div>
-              <button className="signupbtn2" onClick={validateStep2}>Next</button>
-            </>
-          )}
-
-          {step === 3 && (
-            <>
-              <p>Review your details and submit.</p>
-              <button className="signupbtn2" onClick={submit}>Submit</button>
+              <button className="signupbtn2" onClick={validateAndSubmit}>Submit</button> 
             </>
           )}
         </div>

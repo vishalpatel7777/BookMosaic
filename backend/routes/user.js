@@ -69,7 +69,7 @@ router.post("/validate-step2", async (req, res) => {
       });
     }
 
-    return res.status(200).json({ message: "Step 2 validation successful. Proceed to Step 3." });
+    return res.status(200).json({ message: "Welcome.." });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
