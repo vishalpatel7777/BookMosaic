@@ -14,6 +14,7 @@ const RecommendedBooks = () => {
   const bookCardWidth = 350;
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchRecommendedBooks = async () => {
       try {
@@ -21,9 +22,7 @@ const RecommendedBooks = () => {
           id: localStorage.getItem("id"),
           authorization: `Bearer ${localStorage.getItem("token")}`,
         };
-        if (!headers.id || !headers.authorization) {
-          throw new Error("User not logged in");
-        }
+        // No validation for login status; proceed with API call regardless
         const response = await axios.get(
           `${API_URL}/api/v1/get-recommended-books`,
           { headers }
@@ -56,14 +55,14 @@ const RecommendedBooks = () => {
         <h2 className="text-3xl font-semibold font-caveat">
           Recommended Books
         </h2>
-       <div onClick={() => navigate("/allbooks")}>
+        <div onClick={() => navigate("/allbooks")}>
           <div className="ml-auto flex items-center cursor-pointer">
             <h3 className="text-2xl">See all</h3>
             <span className="material-symbols-outlined text-2xl ml-2">
               keyboard_double_arrow_right
             </span>
           </div>
-          </div>
+        </div>
       </div>
       {loading && (
         <div className="flex items-center justify-center mt-6">
