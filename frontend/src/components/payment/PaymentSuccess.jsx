@@ -9,8 +9,8 @@ const PaymentSuccess = () => {
   const { state } = useLocation();
   const { book } = state || {};
   const userId = localStorage.getItem("id");
-  const securePdfUrl = `${API_URL}${book?.pdf}`;
-  console.log(securePdfUrl);
+  const securePdfUrl = book?.pdf; // Use book.pdf directly, no API_URL prefix
+  console.log("Secure PDF URL:", securePdfUrl); // Log to verify
   const hasRun = useRef(false);
 
   useEffect(() => {

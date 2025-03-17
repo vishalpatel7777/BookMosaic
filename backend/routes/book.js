@@ -38,16 +38,18 @@ const upload = multer({
 
 // Function to upload file to Google Drive
 const uploadToGoogleDrive = async (filePath, fileName) => {
-  try {
-    const fileMetadata = { name: fileName, parents: [] };
-    const media = { mimeType: "application/pdf", body: fs.createReadStream(filePath) };
-    const response = await drive.files.create({ resource: fileMetadata, media: media, fields: "id, webViewLink" });
-    await drive.permissions.create({ fileId: response.data.id, requestBody: { role: "reader", type: "anyone" } });
-    return response.data.webViewLink;
-  } catch (error) {
-    console.error("Google Drive upload error:", error.message);
-    throw error;
-  }
+  const fileMetadata = { name: fileName, parents: [] };
+  const media = { mimeType: "application/pdf", body: fs.createReadStream(filePath) };
+  const response = await drive.files.create({
+    resource: fileMetadata,
+    media: media,
+    fields: "id",
+  });
+  await drive.permissions.create({
+    fileId: response.data.id,
+    requestBody: { role: "reader", type: "anyone" },
+  });
+  return `https://drive.google.com/uc?export=download&id=${response.data.id}`; // Direct download URL
 };
 
 // Function to add ratings to books
