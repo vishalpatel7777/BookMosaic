@@ -8,7 +8,15 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/tmp"; // Use /tmp for now since /uploads isn’t mounting
+const auth = new google.auth.GoogleAuth({
+  keyFile: "S:\learn\client_secret_134344225507-5205ee7138shkmcvvusa8okhf98nv7d5.apps.googleusercontent.com.json", // Replace with your credentials file path
+  scopes: ["https://www.googleapis.com/auth/drive.file"],
+});
+
+const drive = google.drive({ version: "v3", auth });
+
+// Multer setup for temporary storage
+const uploadDir = "/tmp"; // Temporary storage before uploading to Google Drive
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,6 +35,36 @@ const upload = multer({
   limits: { fileSize: 60 * 1024 * 1024 }, // 60 MB limit
 }).single("pdf");
 
+// Function to upload file to Google Drive
+const uploadToGoogleDrive = async (filePath, fileName) => {
+  const fileMetadata = {
+    name: fileName,
+    parents: [], // Replace with your folder ID (optional)
+  };
+  const media = {
+    mimeType: "application/pdf",
+    body: fs.createReadStream(filePath),
+  };
+
+  const response = await drive.files.create({
+    resource: fileMetadata,
+    media: media,
+    fields: "id, webViewLink",
+  });
+
+  // Make the file publicly accessible
+  await drive.permissions.create({
+    fileId: response.data.id,
+    requestBody: {
+      role: "reader",
+      type: "anyone",
+    },
+  });
+
+  return response.data.webViewLink; // Returns the public URL
+};
+
+// Function to add ratings to books
 const addRatingsToBooks = async (books) => {
   const ratings = await Rating.aggregate([
     {
@@ -51,6 +89,7 @@ const addRatingsToBooks = async (books) => {
   });
 };
 
+// Add Book Route with Google Drive
 router.post("/add-book", authenticateToken, (req, res) => {
   console.log("Starting /add-book request");
   upload(req, res, async (err) => {
@@ -77,13 +116,22 @@ router.post("/add-book", authenticateToken, (req, res) => {
         return res.status(400).json({ message: "Title, author, price, and PDF are required" });
       }
 
-      const pdfPath = `/uploads/${req.file.filename}`; // URL stays /uploads for client consistency
       const fullPath = path.join(uploadDir, req.file.filename);
-      console.log("PDF saved at:", fullPath);
-      console.log("File exists after upload:", fs.existsSync(fullPath));
+      console.log("PDF temporarily saved at:", fullPath);
+
+      // Upload to Google Drive
+      const pdfUrl = await uploadToGoogleDrive(fullPath, req.file.filename);
+      console.log("PDF uploaded to Google Drive:", pdfUrl);
+
+      // Delete temporary file after uploading
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+        console.log("Temporary file deleted:", fullPath);
+      }
+
       const book = new Book({
         ...(req.body || {}),
-        pdf: pdfPath,
+        pdf: pdfUrl, // Store Google Drive URL
       });
 
       await book.save();
@@ -100,20 +148,10 @@ router.post("/add-book", authenticateToken, (req, res) => {
   });
 });
 
-router.get("/list-uploads", async (req, res) => {
-  try {
-    const files = fs.readdirSync(uploadDir);
-    console.log("Files in", uploadDir, ":", files);
-    res.json(files);
-  } catch (error) {
-    console.error("Error listing", uploadDir, ":", error.message);
-    res.status(500).json({ message: "Error listing files" });
-  }
-});
-
+// Update Book Route with Google Drive
 router.put("/update-book/:id", authenticateToken, (req, res) => {
   console.log("Starting /update-book request");
-  upload(req, res, async (err) => { // Add multer middleware for PDF upload
+  upload(req, res, async (err) => {
     if (err) {
       console.error("Multer error:", err.message);
       return res.status(500).json({ message: "Upload error", error: err.message });
@@ -152,20 +190,22 @@ router.put("/update-book/:id", authenticateToken, (req, res) => {
 
       // Handle PDF update if a new file is uploaded
       if (req.file) {
-        const pdfPath = `/uploads/${req.file.filename}`;
         const fullPath = path.join(uploadDir, req.file.filename);
-        console.log("New PDF saved at:", fullPath);
-        console.log("File exists after upload:", fs.existsSync(fullPath));
-        updateData.pdf = pdfPath;
+        console.log("New PDF temporarily saved at:", fullPath);
 
-        // Optionally delete the old PDF file from /tmp
-        const oldPdfPath = existingBook.pdf ? path.join(uploadDir, path.basename(existingBook.pdf)) : null;
-        if (oldPdfPath && fs.existsSync(oldPdfPath)) {
-          fs.unlinkSync(oldPdfPath);
-          console.log("Deleted old PDF:", oldPdfPath);
+        // Upload to Google Drive
+        const pdfUrl = await uploadToGoogleDrive(fullPath, req.file.filename);
+        console.log("New PDF uploaded to Google Drive:", pdfUrl);
+
+        // Delete temporary file after uploading
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+          console.log("Temporary file deleted:", fullPath);
         }
+
+        updateData.pdf = pdfUrl; // Update with new Google Drive URL
       } else {
-        updateData.pdf = existingBook.pdf; // Keep existing PDF if no new file
+        updateData.pdf = existingBook.pdf; // Keep existing PDF URL
       }
 
       const book = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
@@ -181,7 +221,6 @@ router.put("/update-book/:id", authenticateToken, (req, res) => {
     }
   });
 });
-
 router.delete("/delete-book", authenticateToken, async (req, res) => {
   try {
     const { id, bookid } = req.headers || {};
