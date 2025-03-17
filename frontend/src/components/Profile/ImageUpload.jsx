@@ -6,7 +6,7 @@ const ImageUpload = ({ onImageSelect }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit (10 * 1024 KB * 1024 bytes)
+      if (file.size > 30 * 1024 * 1024) { // 10MB limit (10 * 1024 KB * 1024 bytes)
         alert("Image size exceeds 10MB limit.");
         return;
       }
@@ -22,7 +22,7 @@ const ImageUpload = ({ onImageSelect }) => {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-4 whitespace-nowrap">
-        <label className="font-semibold text-[#333]">Profile Image (Max: 10MB):</label>
+        <label className="font-semibold text-[#333]">Profile Image (Max: 30MB):</label>
         <input
           type="file"
           accept="image/*"

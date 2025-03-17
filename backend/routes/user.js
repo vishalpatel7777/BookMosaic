@@ -9,18 +9,31 @@ const { authenticateToken } = require("../routes/userAuth");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER ,
-    pass: process.env.EMAIL_PASS ,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
+const validatePassword = (password) => {
+  const minLength = password.length >= 6;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  return minLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+};
+
 router.post("/validate-step1", async (req, res) => {
   try {
-    const { email, username } = req.body || {};
-    if (!email || !username) {
-      return res
-        .status(400)
-        .json({ message: "Email and username are required." });
+    const { email, username, age } = req.body || {};
+    if (!email || !username || !age) {
+      return res.status(400).json({ message: "Email, username, and age are required." });
+    }
+    if (username.length <= 4) {
+      return res.status(400).json({ message: "Username length should be greater than 4." });
+    }
+    if (age <= 0) {
+      return res.status(400).json({ message: "Age should be greater than 0." });
     }
 
     const existingUsername = await User.findOne({ username });
@@ -33,9 +46,30 @@ router.post("/validate-step1", async (req, res) => {
       return res.status(400).json({ message: "Email already exists." });
     }
 
-    return res
-      .status(200)
-      .json({ message: "Step 1 validation successful. Proceed to Step 2." });
+    return res.status(200).json({ message: "Step 1 validation successful. Proceed to Step 2." });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/validate-step2", async (req, res) => {
+  try {
+    const { phone, password } = req.body || {};
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required." });
+    }
+    if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+      return res.status(400).json({ message: "Phone number must be exactly 10 digits." });
+    }
+    if (!password || !validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password must be 6+ characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character (e.g., !@#$%^&*).",
+      });
+    }
+
+    return res.status(200).json({ message: "Step 2 validation successful. Proceed to Step 3." });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
@@ -44,25 +78,21 @@ router.post("/validate-step1", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { email, username, password, age, genre, fullname, phone, image } =
-      req.body || {};
+    const { email, username, password, age, genre, fullname, phone, image } = req.body || {};
 
-    if (
-      !email ||
-      !username ||
-      !password ||
-      !age ||
-      !genre ||
-      !fullname ||
-      !phone
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!email || !username || !password || !age || !genre || !fullname || !phone) {
+      return res.status(400).json({ message: "All fields except image are required." });
     }
 
-    if (username.length <= 4) {
-      return res
-        .status(400)
-        .json({ message: "Username length should be greater than 4." });
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password must be 6+ characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character (e.g., !@#$%^&*).",
+      });
+    }
+
+    if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+      return res.status(400).json({ message: "Phone number must be exactly 10 digits." });
     }
 
     const existingUsername = await User.findOne({ username });
@@ -75,14 +105,9 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already exists." });
     }
 
-    if (password.length <= 5) {
-      return res
-        .status(400)
-        .json({ message: "Password length should be greater than 5." });
-    }
-
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const hashedPassword = await bcrypt.hash(password, 10);
+    const defaultImage = "https://www.bing.com/th?id=OIP.S_BEyoTYNIwRpRXmQWtKJAHaHa";
     const newUser = new User({
       username,
       email,
@@ -91,8 +116,7 @@ router.post("/signup", async (req, res) => {
       genre,
       fullname,
       phone,
-      image:
-        image || "https://www.bing.com/th?id=OIP.S_BEyoTYNIwRpRXmQWtKJAHaHa",
+      image: image || defaultImage,
       isVerified: false,
       verificationToken,
     });
@@ -128,8 +152,7 @@ router.post("/signup", async (req, res) => {
 
     await transporter.sendMail(mailOptions);
     return res.status(201).json({
-      message:
-        "User created successfully. Please check your email for verification.",
+      message: "User created successfully. Please check your email for verification.",
     });
   } catch (error) {
     console.error(error.message);
