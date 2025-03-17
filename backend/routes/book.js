@@ -111,46 +111,75 @@ router.get("/list-uploads", async (req, res) => {
   }
 });
 
-// Include all other routes (unchanged from your original)
-router.put("/update-book/:id", authenticateToken, async (req, res) => {
-  try {
-    const userId = req.headers["id"] || "";
-    const bookId = req.params.id || "";
-    if (!userId || !bookId) {
-      return res.status(400).json({ message: "Missing user ID or book ID" });
+router.put("/update-book/:id", authenticateToken, (req, res) => {
+  console.log("Starting /update-book request");
+  upload(req, res, async (err) => { // Add multer middleware for PDF upload
+    if (err) {
+      console.error("Multer error:", err.message);
+      return res.status(500).json({ message: "Upload error", error: err.message });
     }
-    const user = await User.findById(userId);
-    if (!user || user.role !== "admin") {
-      return res.status(403).json({ message: "You are not authorized to update a book" });
+    try {
+      const userId = req.headers["id"] || "";
+      const bookId = req.params.id || "";
+      console.log("User ID from headers:", userId, "Book ID:", bookId);
+      if (!userId || !bookId) {
+        return res.status(400).json({ message: "Missing user ID or book ID" });
+      }
+
+      const user = await User.findById(userId);
+      console.log("User found:", !!user, "Role:", user?.role);
+      if (!user || user.role !== "admin") {
+        return res.status(403).json({ message: "You are not authorized to update a book" });
+      }
+
+      const existingBook = await Book.findById(bookId);
+      if (!existingBook) {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      // Prepare update data
+      const updateData = {
+        url: req.body.url || existingBook.url,
+        title: req.body.title || existingBook.title,
+        author: req.body.author || existingBook.author,
+        subject: req.body.subject || existingBook.subject,
+        genre: req.body.genre || existingBook.genre,
+        desc: req.body.desc || existingBook.desc,
+        price: req.body.price || existingBook.price,
+        language: req.body.language || existingBook.language,
+        image: req.body.image || existingBook.image,
+      };
+
+      // Handle PDF update if a new file is uploaded
+      if (req.file) {
+        const pdfPath = `/uploads/${req.file.filename}`;
+        const fullPath = path.join(uploadDir, req.file.filename);
+        console.log("New PDF saved at:", fullPath);
+        console.log("File exists after upload:", fs.existsSync(fullPath));
+        updateData.pdf = pdfPath;
+
+        // Optionally delete the old PDF file from /tmp
+        const oldPdfPath = existingBook.pdf ? path.join(uploadDir, path.basename(existingBook.pdf)) : null;
+        if (oldPdfPath && fs.existsSync(oldPdfPath)) {
+          fs.unlinkSync(oldPdfPath);
+          console.log("Deleted old PDF:", oldPdfPath);
+        }
+      } else {
+        updateData.pdf = existingBook.pdf; // Keep existing PDF if no new file
+      }
+
+      const book = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
+      console.log("Book updated with ID:", book._id);
+      const bookWithRatings = await addRatingsToBooks([book]);
+      return res.status(200).json({
+        message: "Book updated successfully",
+        data: bookWithRatings[0] || {},
+      });
+    } catch (error) {
+      console.error("Error in /update-book:", error.message);
+      return res.status(500).json({ message: "Internal server error" });
     }
-    const book = await Book.findByIdAndUpdate(
-      bookId,
-      {
-        url: req.body.url || undefined,
-        title: req.body.title || undefined,
-        author: req.body.author || undefined,
-        subject: req.body.subject || undefined,
-        genre: req.body.genre || undefined,
-        desc: req.body.desc || undefined,
-        price: req.body.price || undefined,
-        language: req.body.language || undefined,
-        image: req.body.image || undefined,
-        pdf: req.body.pdf || undefined,
-      },
-      { new: true }
-    );
-    if (!book) {
-      return res.status(404).json({ message: "Book not found" });
-    }
-    const bookWithRatings = await addRatingsToBooks([book]);
-    return res.status(200).json({
-      message: "Book updated successfully",
-      data: bookWithRatings[0] || {},
-    });
-  } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ message: "Internal server error" });
-  }
+  });
 });
 
 router.delete("/delete-book", authenticateToken, async (req, res) => {
