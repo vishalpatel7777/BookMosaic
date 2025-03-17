@@ -201,7 +201,7 @@ router.get("/get-review/:userId/:bookId", async (req, res) => {
   }
 });
 
-router.get("/get-recommended-books", async (req, res) => { 
+router.get("/get-recommended-books", async (req, res) => {
   try {
     const userId = req.headers.id || ""; 
 
@@ -210,7 +210,7 @@ router.get("/get-recommended-books", async (req, res) => {
     const validRatings = ratings.filter((r) => r.user && r.book);
     const allBooks = await Book.find();
 
-   
+    
     const getTopRatedBooksByMaxRating = async (limit = 4, excludeIds = []) => {
       const ratingStats = await Rating.aggregate([
         {
@@ -221,12 +221,12 @@ router.get("/get-recommended-books", async (req, res) => {
         {
           $group: {
             _id: "$book",
-            maxRating: { $max: "$rate" },
             avgRating: { $avg: "$rate" },
             count: { $sum: 1 },
+            latestRating: { $max: "$createdAt" }, 
           },
         },
-        { $sort: { avgRating: -1, count: -1 } }, 
+        { $sort: { avgRating: -1, latestRating: -1 } }, 
         { $limit: limit },
       ]);
       const topBookIds = ratingStats.map((stat) => stat._id);
@@ -236,9 +236,9 @@ router.get("/get-recommended-books", async (req, res) => {
         const stat = ratingStats.find((s) => s._id.toString() === book._id.toString());
         return {
           ...book,
-          maxRating: stat ? stat.maxRating : 0,
           avgRating: stat ? stat.avgRating : 0,
           ratingCount: stat ? stat.count : 0,
+          latestRating: stat ? stat.latestRating : null,
           isRated: excludeIds.includes(book._id.toString()),
         };
       });
@@ -246,87 +246,90 @@ router.get("/get-recommended-books", async (req, res) => {
 
    
     if (!validRatings.length) {
-      const topRatedBooks = await getTopRatedBooksByMaxRating();
-      return res.status(200).json({ data: topRatedBooks });
+      const recentBooks = await Book.find().sort({ createdAt: -1 }).limit(4);
+      const recentBooksWithRatings = await addRatingsToBooks(recentBooks);
+      return res.status(200).json({ data: recentBooksWithRatings });
     }
 
-   
+  
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      const topRatedBooks = await getTopRatedBooksByMaxRating();
+      const topRatedBooks = await getTopRatedBooksByMaxRating(4);
       return res.status(200).json({ data: topRatedBooks });
     }
 
- 
-    const userIds = [...new Set(validRatings.map((r) => r.user._id.toString()))];
-    const allBookIds = allBooks.map((b) => b._id.toString());
-
-    const X = [];
-    const y = [];
-    const ratingMap = validRatings.reduce((acc, r) => {
-      acc[`${r.user._id}-${r.book._id}`] = r.rate;
-      return acc;
-    }, {});
-
-    userIds.forEach((uid, userIndex) => {
-      allBookIds.forEach((bid, bookIndex) => {
-        const rating = ratingMap[`${uid}-${bid}`] || 0;
-        X.push([userIndex, bookIndex]);
-        y.push(rating);
-      });
-    });
-
-    const knn = new KNN(X, y, { k: 3 });
-
+  
     const userRatings = await Rating.find({ user: userId });
     const userRatedBookIds = userRatings.map((r) => r.book.toString());
 
-    const userIndex = userIds.indexOf(userId);
-    if (userIndex === -1) {
-    
-      const topRatedBooks = await getTopRatedBooksByMaxRating();
+  
+    if (!userRatings.length) {
+      const topRatedBooks = await getTopRatedBooksByMaxRating(4);
       return res.status(200).json({ data: topRatedBooks });
     }
 
     
-    const ratedBookIds = [...new Set(validRatings.map((r) => r.book._id.toString()))];
-    const predictions = [];
-    ratedBookIds.forEach((bookId) => {
-      const bookIndex = allBookIds.indexOf(bookId);
-      const predictedRating = knn.predict([[userIndex, bookIndex]])[0];
-      const userRating = userRatings.find((r) => r.book.toString() === bookId)?.rate;
-      if (predictedRating > 0) { // Only include books with positive predictions
-        predictions.push({
-          bookId,
-          predictedRating: userRating || predictedRating,
-          isRated: !!userRating,
-        });
-      }
-    });
+    const ratedBookStats = await Rating.aggregate([
+      {
+        $group: {
+          _id: "$book",
+          avgRating: { $avg: "$rate" },
+          count: { $sum: 1 },
+          latestRating: { $max: "$createdAt" },
+        },
+      },
+      { $sort: { avgRating: -1, latestRating: -1 } },
+    ]);
 
-    predictions.sort((a, b) => b.predictedRating - a.predictedRating);
-    const topPredictions = predictions.slice(0, 4);
-    const topBookIdsFromKNN = topPredictions.map((p) => p.bookId);
+    let recommendedBooks = [];
+    const ratedBookIds = ratedBookStats.map((stat) => stat._id.toString());
 
-    let recommendedBooks = await getTopRatedBooksByMaxRating(4, userRatedBookIds);
-    const knnBooks = await Book.find({ _id: { $in: topBookIdsFromKNN } });
-    const knnBooksWithRatings = await addRatingsToBooks(knnBooks);
+   
+    let ratedBooks = await Book.find({ _id: { $in: ratedBookIds } });
+    ratedBooks = await addRatingsToBooks(ratedBooks);
 
-    const blendedBooks = [...knnBooksWithRatings, ...recommendedBooks]
-      .reduce((unique, book) => {
-        if (!unique.some((b) => b._id.toString() === book._id.toString()))
-          unique.push(book);
-        return unique;
-      }, [])
-      .slice(0, 4);
-
-    recommendedBooks = blendedBooks.map((book) => {
-      const prediction = topPredictions.find((p) => p.bookId === book._id.toString());
+   
+    recommendedBooks = ratedBooks.map((book) => {
+      const stat = ratedBookStats.find((s) => s._id.toString() === book._id.toString());
+      const userRating = userRatings.find((r) => r.book.toString() === book._id.toString());
       return {
         ...book,
-        predictedRating: prediction ? prediction.predictedRating : book.avgRating || 0,
-        isRated: prediction ? prediction.isRated : false,
+        avgRating: stat ? stat.avgRating : 0,
+        ratingCount: stat ? stat.count : 0,
+        latestRating: stat ? stat.latestRating : null,
+        isRated: userRatedBookIds.includes(book._id.toString()),
+        userRating: userRating ? userRating.rate : null,
       };
+    }).sort((a, b) => {
+      if (b.avgRating === a.avgRating) {
+        return new Date(b.latestRating) - new Date(a.latestRating); 
+      }
+      return b.avgRating - a.avgRating; 
     });
+
+ 
+    const numRatedBooks = recommendedBooks.length;
+    if (numRatedBooks < 4) {
+      const remaining = 4 - numRatedBooks;
+      const recentBooks = await Book.find({
+        _id: { $nin: ratedBookIds.map((id) => new mongoose.Types.ObjectId(id)) },
+      })
+        .sort({ createdAt: -1 })
+        .limit(remaining);
+      const recentBooksWithRatings = await addRatingsToBooks(recentBooks);
+      recommendedBooks = [
+        ...recommendedBooks,
+        ...recentBooksWithRatings.map((book) => ({
+          ...book,
+          avgRating: book.ratings || 0,
+          ratingCount: 0,
+          latestRating: null,
+          isRated: false,
+          userRating: null,
+        })),
+      ].slice(0, 4);
+    } else {
+      recommendedBooks = recommendedBooks.slice(0, 4);
+    }
 
     res.status(200).json({ data: recommendedBooks });
   } catch (error) {
