@@ -201,18 +201,16 @@ router.get("/get-review/:userId/:bookId", async (req, res) => {
   }
 });
 
-router.get("/get-recommended-books", authenticateToken, async (req, res) => {
+router.get("/get-recommended-books", async (req, res) => { 
   try {
-    const userId = req.headers.id || "";
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: "Invalid user ID" });
-    }
+    const userId = req.headers.id || ""; 
 
+    
     const ratings = await Rating.find().populate("user book");
     const validRatings = ratings.filter((r) => r.user && r.book);
-
     const allBooks = await Book.find();
 
+   
     const getTopRatedBooksByMaxRating = async (limit = 4, excludeIds = []) => {
       const ratingStats = await Rating.aggregate([
         {
@@ -224,11 +222,11 @@ router.get("/get-recommended-books", authenticateToken, async (req, res) => {
           $group: {
             _id: "$book",
             maxRating: { $max: "$rate" },
-            ratings: { $push: "$rate" },
+            avgRating: { $avg: "$rate" },
             count: { $sum: 1 },
           },
         },
-        { $sort: { maxRating: -1, count: -1 } },
+        { $sort: { avgRating: -1, count: -1 } }, 
         { $limit: limit },
       ]);
       const topBookIds = ratingStats.map((stat) => stat._id);
@@ -239,17 +237,26 @@ router.get("/get-recommended-books", authenticateToken, async (req, res) => {
         return {
           ...book,
           maxRating: stat ? stat.maxRating : 0,
-          individualRatings: stat ? stat.ratings : [],
+          avgRating: stat ? stat.avgRating : 0,
+          ratingCount: stat ? stat.count : 0,
           isRated: excludeIds.includes(book._id.toString()),
         };
       });
     };
 
+   
     if (!validRatings.length) {
       const topRatedBooks = await getTopRatedBooksByMaxRating();
       return res.status(200).json({ data: topRatedBooks });
     }
 
+   
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      const topRatedBooks = await getTopRatedBooksByMaxRating();
+      return res.status(200).json({ data: topRatedBooks });
+    }
+
+ 
     const userIds = [...new Set(validRatings.map((r) => r.user._id.toString()))];
     const allBookIds = allBooks.map((b) => b._id.toString());
 
@@ -275,19 +282,25 @@ router.get("/get-recommended-books", authenticateToken, async (req, res) => {
 
     const userIndex = userIds.indexOf(userId);
     if (userIndex === -1) {
+    
       const topRatedBooks = await getTopRatedBooksByMaxRating();
       return res.status(200).json({ data: topRatedBooks });
     }
 
+    
+    const ratedBookIds = [...new Set(validRatings.map((r) => r.book._id.toString()))];
     const predictions = [];
-    allBookIds.forEach((bookId, bookIndex) => {
+    ratedBookIds.forEach((bookId) => {
+      const bookIndex = allBookIds.indexOf(bookId);
       const predictedRating = knn.predict([[userIndex, bookIndex]])[0];
       const userRating = userRatings.find((r) => r.book.toString() === bookId)?.rate;
-      predictions.push({
-        bookId,
-        predictedRating: userRating || predictedRating,
-        isRated: !!userRating,
-      });
+      if (predictedRating > 0) { // Only include books with positive predictions
+        predictions.push({
+          bookId,
+          predictedRating: userRating || predictedRating,
+          isRated: !!userRating,
+        });
+      }
     });
 
     predictions.sort((a, b) => b.predictedRating - a.predictedRating);
@@ -295,29 +308,25 @@ router.get("/get-recommended-books", authenticateToken, async (req, res) => {
     const topBookIdsFromKNN = topPredictions.map((p) => p.bookId);
 
     let recommendedBooks = await getTopRatedBooksByMaxRating(4, userRatedBookIds);
+    const knnBooks = await Book.find({ _id: { $in: topBookIdsFromKNN } });
+    const knnBooksWithRatings = await addRatingsToBooks(knnBooks);
 
-    const allFlat = predictions.every(
-      (p) => p.predictedRating === predictions[0].predictedRating
-    );
-    if (!allFlat) {
-      const knnBooks = await Book.find({ _id: { $in: topBookIdsFromKNN } });
-      const knnBooksWithRatings = await addRatingsToBooks(knnBooks);
-      const blendedBooks = [...knnBooksWithRatings, ...recommendedBooks]
-        .reduce((unique, book) => {
-          if (!unique.some((b) => b._id.toString() === book._id.toString()))
-            unique.push(book);
-          return unique;
-        }, [])
-        .slice(0, 4);
-      recommendedBooks = blendedBooks.map((book) => {
-        const prediction = topPredictions.find((p) => p.bookId === book._id.toString());
-        return {
-          ...book,
-          predictedRating: prediction ? prediction.predictedRating : book.maxRating || 0,
-          isRated: prediction ? prediction.isRated : false,
-        };
-      });
-    }
+    const blendedBooks = [...knnBooksWithRatings, ...recommendedBooks]
+      .reduce((unique, book) => {
+        if (!unique.some((b) => b._id.toString() === book._id.toString()))
+          unique.push(book);
+        return unique;
+      }, [])
+      .slice(0, 4);
+
+    recommendedBooks = blendedBooks.map((book) => {
+      const prediction = topPredictions.find((p) => p.bookId === book._id.toString());
+      return {
+        ...book,
+        predictedRating: prediction ? prediction.predictedRating : book.avgRating || 0,
+        isRated: prediction ? prediction.isRated : false,
+      };
+    });
 
     res.status(200).json({ data: recommendedBooks });
   } catch (error) {
