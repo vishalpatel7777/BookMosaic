@@ -10,7 +10,7 @@ const path = require("path");
 const { google } = require("googleapis");
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "S:\learn\client_secret_134344225507-5205ee7138shkmcvvusa8okhf98nv7d5.apps.googleusercontent.com.json", // Replace with your credentials file path
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
   scopes: ["https://www.googleapis.com/auth/drive.file"],
 });
 
@@ -176,41 +176,25 @@ router.put("/update-book/:id", authenticateToken, (req, res) => {
         return res.status(404).json({ message: "Book not found" });
       }
 
-      // Prepare update data
       const updateData = {
-        url: req.body.url || existingBook.url,
         title: req.body.title || existingBook.title,
         author: req.body.author || existingBook.author,
-        subject: req.body.subject || existingBook.subject,
-        genre: req.body.genre || existingBook.genre,
-        desc: req.body.desc || existingBook.desc,
         price: req.body.price || existingBook.price,
-        language: req.body.language || existingBook.language,
-        image: req.body.image || existingBook.image,
+        // ... other fields
       };
 
-      // Handle PDF update if a new file is uploaded
       if (req.file) {
         const fullPath = path.join(uploadDir, req.file.filename);
         console.log("New PDF temporarily saved at:", fullPath);
-
-        // Upload to Google Drive
         const pdfUrl = await uploadToGoogleDrive(fullPath, req.file.filename);
         console.log("New PDF uploaded to Google Drive:", pdfUrl);
-
-        // Delete temporary file after uploading
-        if (fs.existsSync(fullPath)) {
-          fs.unlinkSync(fullPath);
-          console.log("Temporary file deleted:", fullPath);
-        }
-
-        updateData.pdf = pdfUrl; // Update with new Google Drive URL
+        fs.unlinkSync(fullPath); // Clean up
+        updateData.pdf = pdfUrl;
       } else {
-        updateData.pdf = existingBook.pdf; // Keep existing PDF URL
+        updateData.pdf = existingBook.pdf;
       }
 
       const book = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
-      console.log("Book updated with ID:", book._id);
       const bookWithRatings = await addRatingsToBooks([book]);
       return res.status(200).json({
         message: "Book updated successfully",
@@ -222,6 +206,8 @@ router.put("/update-book/:id", authenticateToken, (req, res) => {
     }
   });
 });
+
+
 router.delete("/delete-book", authenticateToken, async (req, res) => {
   try {
     const { id, bookid } = req.headers || {};
