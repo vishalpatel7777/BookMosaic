@@ -39,7 +39,6 @@ console.log("Checking /uploads at startup:", fs.existsSync("/uploads"));
 console.log("Checking /tmp at startup:", fs.existsSync("/tmp"));
 console.log("Root dir contents:", fs.readdirSync("/").join(", "));
 
-
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server started at port ${port}`);

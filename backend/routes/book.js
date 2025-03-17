@@ -8,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const uploadDir = "/tmp"; // Switch to tmp for now
+const uploadDir = "/tmp"; // Use /tmp for now since /uploads isn’t mounting
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,10 +24,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 60 * 1024 * 1024 },
+  limits: { fileSize: 60 * 1024 * 1024 }, // 60 MB limit
 }).single("pdf");
 
-// Re-add addRatingsToBooks (was missing)
 const addRatingsToBooks = async (books) => {
   const ratings = await Rating.aggregate([
     {
@@ -78,7 +77,7 @@ router.post("/add-book", authenticateToken, (req, res) => {
         return res.status(400).json({ message: "Title, author, price, and PDF are required" });
       }
 
-      const pdfPath = `/uploads/${req.file.filename}`; // Keep URL consistent
+      const pdfPath = `/uploads/${req.file.filename}`; // URL stays /uploads for client consistency
       const fullPath = path.join(uploadDir, req.file.filename);
       console.log("PDF saved at:", fullPath);
       console.log("File exists after upload:", fs.existsSync(fullPath));
@@ -112,23 +111,18 @@ router.get("/list-uploads", async (req, res) => {
   }
 });
 
-
+// Include all other routes (unchanged from your original)
 router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {
     const userId = req.headers["id"] || "";
     const bookId = req.params.id || "";
-
     if (!userId || !bookId) {
       return res.status(400).json({ message: "Missing user ID or book ID" });
     }
-
     const user = await User.findById(userId);
     if (!user || user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to update a book" });
+      return res.status(403).json({ message: "You are not authorized to update a book" });
     }
-
     const book = await Book.findByIdAndUpdate(
       bookId,
       {
@@ -145,11 +139,9 @@ router.put("/update-book/:id", authenticateToken, async (req, res) => {
       },
       { new: true }
     );
-
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
-
     const bookWithRatings = await addRatingsToBooks([book]);
     return res.status(200).json({
       message: "Book updated successfully",
@@ -165,23 +157,16 @@ router.delete("/delete-book", authenticateToken, async (req, res) => {
   try {
     const { id, bookid } = req.headers || {};
     if (!id || !bookid) {
-      return res
-        .status(400)
-        .json({ message: "Missing user ID or book ID in headers" });
+      return res.status(400).json({ message: "Missing user ID or book ID in headers" });
     }
-
     const user = await User.findById(id);
     if (!user || user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to delete a book" });
+      return res.status(403).json({ message: "You are not authorized to delete a book" });
     }
-
     const book = await Book.findByIdAndDelete(bookid);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
-
     return res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     console.error(error.message);
@@ -223,12 +208,10 @@ router.get("/get-book-by-id/:id", async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "Missing book ID in parameters" });
     }
-
     const book = await Book.findById(id);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
-
     const bookWithRatings = await addRatingsToBooks([book]);
     return res.status(200).json({
       status: "success",
@@ -244,7 +227,6 @@ router.get("/get-all-books-search", async (req, res) => {
   try {
     const { search } = req.query || {};
     let query = {};
-
     if (search) {
       query = {
         $or: [
@@ -253,7 +235,6 @@ router.get("/get-all-books-search", async (req, res) => {
         ],
       };
     }
-
     const books = await Book.find(query).sort({ createdAt: -1 });
     const booksWithRatings = await addRatingsToBooks(books);
     return res.status(200).json({
@@ -275,17 +256,9 @@ router.get("/book-stats", async (req, res) => {
       { $group: { _id: "$books", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 5 },
-      {
-        $lookup: {
-          from: "books",
-          localField: "_id",
-          foreignField: "_id",
-          as: "book",
-        },
-      },
+      { $lookup: { from: "books", localField: "_id", foreignField: "_id", as: "book" } },
       { $unwind: "$book" },
     ]);
-
     res.status(200).json({
       topRatedBooks: topRatedBooks || [],
       trendingBooks: trendingBooks || [],
