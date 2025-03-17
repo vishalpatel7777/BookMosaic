@@ -7,6 +7,7 @@ const { authenticateToken } = require("../routes/userAuth");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const { google } = require("googleapis");
 
 const auth = new google.auth.GoogleAuth({
   keyFile: "S:\learn\client_secret_134344225507-5205ee7138shkmcvvusa8okhf98nv7d5.apps.googleusercontent.com.json", // Replace with your credentials file path
